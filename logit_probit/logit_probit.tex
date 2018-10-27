@@ -1,0 +1,177 @@
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% First comes an example EPS file -- just ignore it and
+% proceed on the \documentclass[•]{•} line
+% your LaTeX will extract the file if required
+\begin{filecontents*}{example.eps}
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 19 19 221 221
+%%CreationDate: Mon Sep 29 1997
+%%Creator: programmed by hand (JK)
+%%EndComments
+gsave
+newpath
+  20 20 moveto
+  20 220 lineto
+  220 220 lineto
+  220 20 lineto
+closepath
+2 setlinewidth
+gsave
+  .4 setgray fill
+grestore
+stroke
+grestore
+\end{filecontents*}
+%
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsfonts, mathtools}
+\usepackage{enumerate}
+\usepackage{algorithm, algpseudocode}
+\usepackage{txfonts, pxfonts}
+\usepackage{grffile}
+\usepackage{caption, subcaption}
+\usepackage{listings}
+\usepackage[table, xcdraw]{xcolor}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{chronology}
+\usetikzlibrary{arrows, shapes}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{libertine}
+\usepackage{pgfgantt}
+\usepackage{lscape}
+\usepackage{enumitem}
+
+\usepackage{tikz} % drawing graph
+\usetikzlibrary{arrows.meta} % drawing graph
+%\usepackage[tight,footnotesize]{subfigure}
+
+\input amssym.def
+\input amssym.tex
+%
+% please place your own definitions here and don't use \def but
+\newcommand{\mmlcpt}{$mbMML_{CPT}$ }
+\newcommand{\mbptmml}{$MBPT_{mml}$ }
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\ci}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\newcommand{\independent}{\perp\mkern-9.5mu\perp}
+\newcommand{\notindependent}{\centernot{\independent}}
+\newcommand{\qedwhite}{\hfill \ensuremath{\Box}}
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+\makeatletter
+% Taken from http://ctan.org/pkg/centernot
+\newcommand*{\centernot}{%
+  \mathpalette\@centernot
+}
+\def\@centernot#1#2{%
+  \mathrel{%
+    \rlap{%
+      \settowidth\dimen@{$\m@th#1{#2}$}%
+      \kern.5\dimen@
+      \settowidth\dimen@{$\m@th#1=$}%
+      \kern-.5\dimen@
+      $\m@th#1\not$%
+    }%
+    {#2}%
+  }%
+}
+\makeatother
+
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+% This file can be modified and used in other conferences as long
+% as credit to the authors and supporting agencies is retained, this notice
+% is not changed, and further modification or reuse is not restricted.
+
+\begin{document}
+
+\title{Logit and probit models
+%On checking Markov blankets consistency with DAGs via graph immoralization%\thanks{Grants or other notes
+%about the article that should go on the front page should be
+%placed here. General acknowledgments should be placed at the end of the article.}
+}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Kelvin Yang Li}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Kelvin Yang Li \at
+              Faculty of IT, Monash University, Victoria, Australia \\
+              \email{yang.kelvinli@monash.edu}           %  \\
+%             \emph{Present address:} of F. Author  %  if needed
+}
+
+\date{Started: 27 October 2018/ Finished: 27 October 2018}
+% The correct dates will be entered by the editor
+
+\maketitle
+
+A \textit{sigmoid function} is a function having a S-shaped curve. It is monotonically increasing function that takes inputs between $(-\infty,\infty)$ and outputs between $(0,1$ or $(-1,1)$. Its mathematical form is 
+\begin{align*}
+S(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{e^x+1}.
+\end{align*}
+Examples of sigmoid functions are the logistic function, hyperbolic tangent function, CDFs, etc. 
+
+\section{Logit model}
+The \textit{logistic distribution} is a continuous probability distribution that has bell shaped PDF curves. Its PDF is parameterized by mean $\mu$ and a scale parameter $s=q\sigma$ that is proportional to the standard deviation by $q=\sqrt{3}/\pi$. The PDF of the logistic distribution is expressed as 
+\begin{align*}
+f(x;\mu;s)=\frac{e^{-\frac{x-\mu}{s}}}{s(1+e^{-\frac{x-\mu}{s}})^2}=\frac{1}{s(e^{\frac{x-\mu}{2s}}+e^{-\frac{x-\mu}{2s}})^2}.
+\end{align*}
+The CDF of the logistic distribution is also known as the \textit{logistic function} and is expressed as 
+\begin{align*}
+F(x;\mu;s)=\frac{1}{1+e^{-\frac{x-\mu}{s}}},
+\end{align*}
+which is a function of the family of the logistic functions. The standard logistic function is when $\mu=0$ and $s=1$, so it has the same functional form as the sigmoid function. The logistic function often mentioned when introducing logit model refers to the standard logistic function (or the sigmoid function). 
+
+In a logit model, each predictor $x_i$ has an associated parameter $\beta_i$, so the \textit{log-odds} $t=\beta_0 x_0+\cdots+\beta_m x_m = \vec{\beta}\cdot \vec{x} \in (-\infty,\infty)$ for $i\in [0,m]$, where $\beta_0$ is known as the intercept and setting $x_0=1$ is a trick for both programming convenience and expressing $t$ in a compact form. Since probability=odds/(1+odds), the logistic function converts the log-odds into probabilities by 
+\begin{align*}
+P(y=1\mid x) = \frac{1}{1+e^{-\vec{\beta}\cdot \vec{x}}}.
+\end{align*}
+The observed data for logit models are $x$s and and a binary $y$. We can assume there exists a latent variable $y^*=\vec{\beta}\cdot \vec{x}+\epsilon$, where $\epsilon$ is an unobserved error term but assumed to follow a standard logistic distribution. Hence, $y$ can be interpreted as an indicator of whether or not $y^*$ is positive. That is, if $\vec{\beta}\cdot \vec{x}+\epsilon >0$ then $y=1$, else $y=0$. Hence, we have 
+\begin{align*}
+P(y=1\mid x) &= p(\epsilon>-\vec{\beta}\cdot \vec{x}) \\
+&= p(\epsilon<\vec{\beta}\cdot \vec{x}) \\
+&= \frac{1}{1+e^{-\vec{\beta}\cdot \vec{x}}}.
+\end{align*}
+
+The logit model is a case of the family called \textit{generalized linear model}. It uses the standard logistic function as the link function. 
+
+\section{Probit model}
+The probit model is also in the family of generalized linear model, but uses a different link function from the logit model. In particular, the probit model uses the CDF $\Phi()$ of the standard normal distribution. The functional form of the probit model $P(y=1\mid x)=\Phi(\vec{beta}\cdot \vec{x})$ can also be derived using a latent variable $y^*$ and an unobserved error $\epsilon \sim N(0,1)$ that assumed to follow a standard normal distribution.
+
+\end{document}
