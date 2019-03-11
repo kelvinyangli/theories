@@ -1,0 +1,35 @@
+\BOOKMARK [0][-]{chapter*.1}{Abstract}{}% 1
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 2
+\BOOKMARK [0][-]{chapter.2}{The Basics}{}% 3
+\BOOKMARK [1][-]{section.2.1}{Graphs and subgraphs}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.2}{Paths, cycles and trees}{chapter.2}% 5
+\BOOKMARK [1][-]{section.2.3}{Complete m-ary trees}{chapter.2}% 6
+\BOOKMARK [0][-]{chapter.3}{Linear metric labelling problem}{}% 7
+\BOOKMARK [1][-]{section.3.1}{Definitions and notation}{chapter.3}% 8
+\BOOKMARK [1][-]{section.3.2}{Known results for linear metric labelling problems}{chapter.3}% 9
+\BOOKMARK [2][-]{subsection.3.2.1}{Paths and cycles}{section.3.2}% 10
+\BOOKMARK [2][-]{subsection.3.2.2}{Trees}{section.3.2}% 11
+\BOOKMARK [2][-]{subsection.3.2.3}{Planar graphs}{section.3.2}% 12
+\BOOKMARK [2][-]{subsection.3.2.4}{Outerplanar graphs}{section.3.2}% 13
+\BOOKMARK [1][-]{section.3.3}{The L\(h,1,1\)-labelling of complete m-ary trees}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.4}{The L\(h,p,q\)-labelling of complete m-ary trees}{chapter.3}% 15
+\BOOKMARK [1][-]{section.3.5}{The L\(h,p,q\)-labelling of broader sets of trees}{chapter.3}% 16
+\BOOKMARK [2][-]{subsection.3.5.1}{The sets of trees with 2 value equals 2-1 or 2}{section.3.5}% 17
+\BOOKMARK [2][-]{subsection.3.5.2}{Generalisation of the L\(h,p,q\)-labelling problem to the sets D and F}{section.3.5}% 18
+\BOOKMARK [2][-]{subsection.3.5.3}{The set of trees with Tm,2 as a local structure}{section.3.5}% 19
+\BOOKMARK [0][-]{chapter.4}{Cyclic metric labelling problem}{}% 20
+\BOOKMARK [1][-]{section.4.1}{Definitions and notation}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.2}{Known results for cyclic metric labelling problem}{chapter.4}% 22
+\BOOKMARK [2][-]{subsection.4.2.1}{Outerplanar graphs}{section.4.2}% 23
+\BOOKMARK [1][-]{section.4.3}{The C\(h,1,1\)-labelling problem}{chapter.4}% 24
+\BOOKMARK [2][-]{subsection.4.3.1}{Complete m-ary tree with height 2}{section.4.3}% 25
+\BOOKMARK [2][-]{subsection.4.3.2}{Complete m-ary trees with height no less than 3}{section.4.3}% 26
+\BOOKMARK [1][-]{section.4.4}{The C\(h,p, q\)-labelling problem}{chapter.4}% 27
+\BOOKMARK [2][-]{subsection.4.4.1}{Complete m-ary tree Tm,2 with height 2}{section.4.4}% 28
+\BOOKMARK [2][-]{subsection.4.4.2}{Complete m-ary tree Tm,k with height k 3}{section.4.4}% 29
+\BOOKMARK [1][-]{section.4.5}{The C\(h,1,1\)-labelling of broader sets of trees}{chapter.4}% 30
+\BOOKMARK [2][-]{subsection.4.5.1}{The C\(h,1,1\)-labelling of the sets D and F}{section.4.5}% 31
+\BOOKMARK [2][-]{subsection.4.5.2}{The C\(h,1,1\)-labelling of the set K}{section.4.5}% 32
+\BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 33
+\BOOKMARK [0][-]{chapter*.25}{Appendix}{}% 34
+\BOOKMARK [0][-]{table.5.1}{Bibliography}{}% 35

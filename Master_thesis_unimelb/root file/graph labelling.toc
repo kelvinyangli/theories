@@ -1,0 +1,35 @@
+\contentsline {chapter}{Abstract}{i}{chapter*.1}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {chapter}{\numberline {2}The Basics}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Graphs and subgraphs}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Paths, cycles and trees}{6}{section.2.2}
+\contentsline {section}{\numberline {2.3}Complete $m$-ary trees}{10}{section.2.3}
+\contentsline {chapter}{\numberline {3}Linear metric labelling problem}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Definitions and notation}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}Known results for linear metric labelling problems}{14}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Paths and cycles}{15}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Trees}{16}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Planar graphs}{17}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Outerplanar graphs}{18}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}The $L(h,1,1)$-labelling of complete $m$-ary trees}{19}{section.3.3}
+\contentsline {section}{\numberline {3.4}The $L(h,p,q)$-labelling of complete $m$-ary trees}{23}{section.3.4}
+\contentsline {section}{\numberline {3.5}The $L(h,p,q)$-labelling of broader sets of trees}{29}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}The sets of trees with $\Delta _2$ value equals $2\Delta -1$ or $2\Delta $}{29}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.2}Generalisation of the $L(h,p,q)$-labelling problem to the sets ${\cal D}$ and ${\cal F}$}{31}{subsection.3.5.2}
+\contentsline {subsection}{\numberline {3.5.3}The set of trees with $T_{m,2}$ as a local structure}{35}{subsection.3.5.3}
+\contentsline {chapter}{\numberline {4}Cyclic metric labelling problem}{41}{chapter.4}
+\contentsline {section}{\numberline {4.1}Definitions and notation}{41}{section.4.1}
+\contentsline {section}{\numberline {4.2}Known results for cyclic metric labelling problem}{46}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Outerplanar graphs}{46}{subsection.4.2.1}
+\contentsline {section}{\numberline {4.3}The $C(h,1,1)$-labelling problem}{47}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Complete $m$-ary tree with height $2$}{47}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Complete $m$-ary trees with height no less than $3$}{49}{subsection.4.3.2}
+\contentsline {section}{\numberline {4.4}The $C(h,p, q)$-labelling problem}{54}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Complete $m$-ary tree $T_{m,2}$ with height $2$}{55}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Complete $m$-ary tree $T_{m,k}$ with height $k \ge 3$}{61}{subsection.4.4.2}
+\contentsline {section}{\numberline {4.5}The $C(h,1,1)$-labelling of broader sets of trees}{64}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}The $C(h,1,1)$-labelling of the sets ${\cal D}$ and ${\cal F}$}{65}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}The $C(h,1,1)$-labelling of the set ${\cal K}$}{72}{subsection.4.5.2}
+\contentsline {chapter}{\numberline {5}Conclusion}{75}{chapter.5}
+\contentsline {chapter}{Appendix}{77}{chapter*.25}
+\contentsline {chapter}{Bibliography}{78}{table.5.1}

@@ -1,0 +1,100 @@
+\begin{thebibliography}{16}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Agnarsson and Halld{\'o}rsson(2004)]{agnarsson04}
+G.~Agnarsson and M.M. Halld{\'o}rsson.
+\newblock On colorings of squares of outerplanar graphs.
+\newblock In \emph{Proceedings of the fifteenth annual ACM-SIAM symposium on
+  Discrete algorithms}, pages 244--253. Society for Industrial and Applied
+  Mathematics, 2004.
+
+\bibitem[Bodlaender et~al.(2004)Bodlaender, Kloks, Tan, and
+  Van~Leeuwen]{bodlaender04}
+H.L. Bodlaender, T.~Kloks, R.B. Tan, and J.~Van~Leeuwen.
+\newblock Approximations for $\lambda$-colorings of graphs.
+\newblock \emph{The Computer Journal}, 47\penalty0 (2):\penalty0 193, 2004.
+
+\bibitem[Calamoneri and Petreschi(2004)]{calamoneri04}
+T.~Calamoneri and R.~Petreschi.
+\newblock ${L}(h, 1)$-labeling subclasses of planar graphs.
+\newblock \emph{Journal of Parallel and Distributed Computing}, 64\penalty0
+  (3):\penalty0 414--426, 2004.
+
+\bibitem[Calamoneri et~al.(2008)Calamoneri, Fusco, Tan, and
+  Vocca]{calamoneri07}
+T.~Calamoneri, E.~G. Fusco, R.~B. Tan, and P.~Vocca.
+\newblock ${L}(h, 1,1)$-labeling of outerplanar graphs.
+\newblock 2008.
+
+\bibitem[Chang et~al.(2000)Chang, Ke, Kuo, Liu, and Yeh]{chang00}
+G.~J. Chang, W.~Ke, D.~Kuo, D.~D. Liu, and R.~K. Yeh.
+\newblock On ${L}(d, 1)$-labelings of graphs.
+\newblock \emph{Discrete Mathematics}, 220:\penalty0 57--66, 2000.
+
+\bibitem[Diestel(2000)]{diestel00}
+R.~Diestel.
+\newblock \emph{Graph theory, Graduate Texts in Mathematics}.
+\newblock Springer-Verlag, New York, 2000.
+
+\bibitem[Georges and Mauro(1995)]{georges95}
+J.~Georges and D.~W. Mauro.
+\newblock Generalized vertex labellings with a condition at distance two.
+\newblock \emph{Congr. Numer.}, 109:\penalty0 141--159, 1995.
+
+\bibitem[Griggs and Yeh(1992)]{griggs92}
+J.~R. Griggs and R.~K. Yeh.
+\newblock Labelling graphs with a condition at distance 2.
+\newblock \emph{Siam Journal on Discrete Mathematics}, 5:\penalty0 586--595,
+  1992.
+
+\bibitem[Heuvel and McGuinness(2003)]{van03}
+J.~V. Heuvel and S.~McGuinness.
+\newblock Coloring the square of a planar graph.
+\newblock \emph{Journal of Graph Theory}, 42\penalty0 (2):\penalty0 110--124,
+  2003.
+
+\bibitem[Jonas(1993)]{jonas93}
+T.~K. Jonas.
+\newblock \emph{Graph coloring analogues with a condition at distance two:
+  ${L}(2, 1)$-labellings and list $\lambda$-labellings}.
+\newblock PhD thesis, University of South Carolina, 1993.
+
+\bibitem[King et~al.(2010)King, Ras, and Zhou]{zhou10}
+D.~King, C.~J. Ras, and S.~Zhou.
+\newblock The ${L}(h, 1, 1)$-labelling problem for trees.
+\newblock \emph{European Journal of Combinatorics}, 31:\penalty0 1295--1306,
+  2010.
+
+\bibitem[Li and Zhou(preprint)]{zhou11}
+X.~Li and S.~Zhou.
+\newblock ${L}(2, 1)$-labelling of outer planar graphs with maximum degree $3$.
+\newblock preprint.
+
+\bibitem[Liu and Zhu(2005)]{liu05}
+D.~D. Liu and X.~Zhu.
+\newblock Circular distance two labeling and the $\lambda$-number for
+  outerplanar graphs.
+\newblock \emph{Siam Journal on Discrete Mathematics}, 19:\penalty0 281--293,
+  2005.
+
+\bibitem[Molloy and Salavatipour(2005)]{molloy05}
+M.~Molloy and M.~R. Salavatipour.
+\newblock A bound on the chromatic number of the square of a planar graph.
+\newblock \emph{Journal of Combinatorial Theory}, 94:\penalty0 189--213, 2005.
+
+\bibitem[Wegner(1997)]{wegner97}
+G.~Wegner.
+\newblock Graphs with given diameter and a coloring problem.
+\newblock Technical report, University of Dortmund, Dortmund, 1997.
+
+\bibitem[Yeh(1990)]{yeh90}
+R.~K. Yeh.
+\newblock \emph{Labelling graphs with a condition at distance two}.
+\newblock PhD thesis, Department of Mathematics, University of South Carolina,
+  1990.
+
+\end{thebibliography}

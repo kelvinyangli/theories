@@ -1,0 +1,26 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Example of graphs\relax }}{6}{figure.caption.4}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Example of a path and a cycle\relax }}{7}{figure.caption.5}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Tree height and vertex depth\relax }}{9}{figure.caption.6}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Example of $m$-ary trees\relax }}{10}{figure.caption.7}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Construct $T_{m,k+1}$ from $T_{m,k}$\relax }}{11}{figure.caption.8}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Two $L(h,1,1)$-labellings of $T_{2,2}$\relax }}{15}{figure.caption.9}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Minimum useful subtree of $T_{m,2}$\relax }}{21}{figure.caption.10}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces The $L(h,1,1)$-labelling of $T_{m,3}$ with span equals $2m+h$\relax }}{22}{figure.caption.11}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces $g(C(u_0))\subsetneq [0, \qopname \relax m{max}\{g(N(u_1))\}]$\relax }}{27}{figure.caption.12}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces The minimal trees $D_{min} \in {\cal D}$ and $F_{min} \in {\cal F}$\relax }}{30}{figure.caption.13}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces The $L(h,p,q)$-labelling of $D_{max}$\relax }}{33}{figure.caption.14}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces The $L(h,p,q)$-labelling of $D_{max}$\relax }}{33}{figure.caption.15}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces The $L(h,p,q)$-labelling of $D_{min}$ with span equals $\qopname \relax m{max}\{(2\Delta - 3)p+q, (\Delta -1)p+h\}$\relax }}{35}{figure.caption.16}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces The $L(h,p,q)$-labelling of $F_{min}$ with span equals $\qopname \relax m{max}\{(2\Delta - 2)p+q, (\Delta -1)p+h\}$\relax }}{36}{figure.caption.17}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Example of cyclic distance\relax }}{43}{figure.caption.18}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Example of $C(2,1,1)$-labelliings of $T_{2,2}$\relax }}{44}{figure.caption.19}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Equivalent relation between two $C(h,1,1)$-labellings of a $T_{2,2}$\relax }}{45}{figure.caption.20}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces $span(f) = 2h+m-2$ is not sufficient to $C(h,1,1)$-label $T_{m,2}$\relax }}{48}{figure.caption.21}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Two consecutive sets for $C(u_{0\dots jkl})$\relax }}{52}{figure.caption.22}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces One consecutive set for $C(u_{0\dots jkl})$\relax }}{52}{figure.caption.23}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Special case when $f(N(u_{0\dots jk})) \subsetneq W$\relax }}{54}{figure.caption.24}
+\addvspace {10\p@ }

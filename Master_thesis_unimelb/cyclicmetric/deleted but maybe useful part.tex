@@ -1,0 +1,120 @@
+
+%The proof of this theorem is similar to the above one. That is, we know from the results of $L(h,1,1)$-labelling that $\l = 2m+h$. Hence, we have $\t_{h,1,1} \ge \l = 2m+h$.  For $2h+m-1$, we need to show there will be a contradiction if we decrease this value by even just $1$. (done)
+
+%To prove the upper bound is the same as the lower bound, we need to come up with some certain constructions such that these values are achieved. Note that the constructions for the tree $T$ with $k \ge 3$ is harder, since the tree may have infinite levels.
+%\qed
+%Before stating the lemma, let us introduce a new concept. For vertices on a complete $m$-ary tree $T$ with the same depth, if they have the same parent, then we say they are in the same group. For example, for vertices on $T$ with depth $p = 2$, we can distinguish them into $m$ different groups. 
+\begin{lemma}
+Let $T$ be a complete $m$-ary tree with height $k \ge 3$. $H$ is a labelled cycle such that the maximum label on it is $\max\{2m+h, 2h+m-1\}$. Then there exists a function $f : V(T) \rightarrow V(H)$ such that the triple $\zeta = (T, f, H)$ is a $C(h,1,1)$-labelling. 
+%Let $\zeta = (T, f, H)$ be a $C(h,1,1)$-labelling on a complete $m$-ary tree $T$ with height $k \ge 3$. For vertices on $T$ with depth $p \ge 3$, if one group of vertices can be mapped to $H$, then the other groups can be mapped to $H$ using the same function $f$ without increasing the maximum label on $H$.
+\end{lemma}
+
+We will use induction to prove this lemma. Proposition \ref{cor:k=3} proves that the function $f$ works for the case when $k = 3$. Proposition \ref{cor:k>3} proves the iterative relation for general $k$. 
+\begin{proposition}
+\label{cor:k=3}
+There is a function $f: V(T) \rightarrow V(H)$ when $k = 3$ such that $\zeta = (T, f, H)$ is a $C(h,1,1)$-labelling with $\t_{h,1,1}(T) =\max\{2m+h, 2h+m-1\}$. 
+\end{proposition}
+\begin{proof} 
+The following labelling can prove this proposition.  
+\\
+\\
+For $h < m$, we have $\t_{h,1,1}(T) = 2m+h$. 
+\begin{enumerate}[(1)]
+\item $f(u_0) = 0$ 
+\item $f(u_i) = [h, h+m-1]$, where $i \in [1,m]$ 
+\item For fixed $i \in [1,m]$, when $f(u_i) \le m$ do $(a)$, otherwise do $(b)$
+\begin{enumerate}[(a)]
+\item $f(S_i) = [h+m, 2m+h-1]$
+\item In this case, we have $f(u_i) \ge m+1$. i.e. $f(u_i) = m+1+t$, where $t$ is a non-negative integer, then $f(S_i) = [h+m+1+t, 2m+h] \cup (0, t]$
+\end{enumerate}
+\item $f(S_{ij}) \in H \setminus P$, where the set $P =  \{f(u_0)\} \cup \{f(u_i)\} \cup f(S_i) \cup [f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]$
+\end{enumerate}
+Note that, we can re-write $(4)$ as the following:
+\begin{enumerate}[(4.1)]
+\item For $i \in [1,m-h+1]$, let $t_1 = j - (m-h+1)$, if $j \in [1,m-h+1]$ do $(a)$, otherwise do $(b)$ (i.e. when $ j \in [m-h+2, m]$)
+\begin{enumerate}[(a)]
+\item $f(S_{ij}) = \{2m+h\} \cup [1,m] \setminus \{h+i-1\}$
+\item $f(S_{ij}) = [1+t_1,   m+1+t_1] \setminus \{h+i-1\}$
+\end{enumerate}
+\item For $i \in [m-h+2, m]$, let $r = i - (m-h+2)$, $t_2 = j - (m-h+3+r)$, if $j \in [1, m-h+2+r]$ do $(a)$, otherwise do $(b)$
+\begin{enumerate}[(a)]
+\item $f(S_{ij}) = [1+r, m+r]$
+\item $f(S_{ij}) = [ 2+r+t_2, m+2+r+t_2] \setminus \{m+1+r\}$
+\end{enumerate}
+\end{enumerate}
+Note that the first four steps are similar to the labelling on $T$ with $k = 2$ only with a slight change, as we increase the number of vertices on the cycle $H$ by $1$. The key point above is the last step, which is for labelling those vertices with depth $p = 3$. Since the tree $T$ is with height $k = 3$, none of the vertices in $T$ can use the same label as the root does, so we need to take away $f(u_0)$ from $H$. Also, $u_i$ and $S_i$ are within distance $3$ to $S_{ij}$, hence we need to take away $f(u_i)$ and $f(S_i)$. As $S_{ij}$ is the children of the vertex $u_{ij}$, we have $d_H(S_{ij}, u_{ij}) \ge h$, so $f(S_{ij})$ cannot lie in the set $[f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]$. 
+
+As the first four steps above are similar to the construction is the proof of Theorem \ref{thm:ck2}, we can ensure that these steps provides enough labels for the corresponding vertices Hence, if we can show that the last step gives us enough labels for those vertices with depth $3$, then above constructions are valid for labelling $T$ with $k = 3$. Since $h < m$, then we have $\max\{f(S_i) \cup [f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]\} = [\min\{f(S_i)\} - (h-1),\min\{f(S_i)\}-1]\cup f(S_i)$. Hence, we have $|f(S_i) \cup [f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]| \le m+h-1$. This implies $|P| \le m+h+1$. Hence implies $|H \setminus P| \ge m$, as $|H| = 2m+h+1$. Since for $i, j \in [1,m]$, the set $S_{ij}$ can use the same labels, we proved that the above labelling gives enough labels for them. 
+\\
+\\
+For $h = m$, we have $\t_{h,1,1}(T) = 2m+h (= 2h+m)$. 
+\begin{enumerate}[(1)]
+\item $f(u_0) = 0$ 
+\item $f(u_i) = [h, h+m-1]$, where $i \in [1,m]$ 
+\item $f(S_i) \subseteq (0, i-1] \cup [2h+(i-1), 2h+m]$, where $i \in [1,m]$. 
+\item $f(S_{ij}) \in H \setminus P$, where the set $P =  \{f(u_0)\} \cup \{f(u_i)\} \cup f(S_i) \cup [f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]$. 
+\end{enumerate}
+The last step can be re-written as follows:
+\begin{enumerate}[(4.1)]
+\item For $f(S_{1j})$, when $j = 1$ do $(a)$, otherwise do $(b)$
+\begin{enumerate}[(a)]
+\item $[1,h-1] \cup \{2m+h\}$
+\item $[1+ \max\{0, j-3\}, h+1+\max\{0, j-3\}] \setminus \{h\}$
+\end{enumerate}
+\item For $f(S_{ij})$ where $i \in [2,m]$, when $j \in [1, m-(i-2)]$ (i.e. $f(u_{ij}) \in [2h+(i-1), 2h+m]$) do $(a)$, otherwise do $(b)$
+\begin{enumerate}[(a)]
+\item $[(i-1)+\max\{0, j-2\}, h+(i-1) + \max\{0, j-2\}] \setminus \{h+i-1\}$
+\item $[j+(i-2), h+j+(i-2)] \setminus \{h+i-1\}$
+\end{enumerate}
+\end{enumerate}
+By the same reasons as above, this is a fair labelling.
+\\
+\\
+For $h >m$, we have $\t_{h,1,1}(T) = 2h+m-1$. 
+\begin{enumerate}[(1)]
+\item $f(u_0) = 0$
+\item $\{f(u_i) \mid i \in [1,m]\} \in [h,h+m-1]$ such that $f(u_{1}) = h$, and $f(u_{l}) <f(u_{l+1})$ for all $l \in [1,m-1]$
+\item $f(S_i) \subseteq (0, i-1] \cup [2h+(i-1), 2h+m]$, where $i \in [1,m]$. 
+\item $f(S_{ij}) \subseteq H\setminus P$, where $P = \{f(u_i)\} \cup  [f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]$. 
+\end{enumerate} 
+In fact, we can write down a specific labelling for the set of vertices $S_{ij}$. Hence, the last step can be re-written as 
+\begin{enumerate}[(4)]
+\item If $f(u_{ij}) \in [2h+(i-1), 2h+m]$ do $(a)$, otherwise do $(b)$.
+\begin{enumerate}[(a)]
+\item $f(S_{ij}) = [h-m+(i-1)+(j-1), h+(i-1)+(j-1)] \setminus (h+(i-1))$
+\item $f(S_{ij}) = [h-m+i+(j-1), h+i+(j-1)] \setminus (h+(i-1))$
+\end{enumerate}
+\end{enumerate}
+The first three steps are as before. Note that in the last step, we only take away the set $ [f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]$ and $f(u_i)$. As we assume $h > m$, this implies both $f(u_0)$ and $f(S_i)$ are subsets of the set $[f(u_{ij}) - (h-1), f(u_{ij}) + (h-1)]$. Hence, we have $|H \setminus P| = (2h+m) - (2h-1+1) = m$. Hence, this construction also provides enough labels for $S_{ij}$. Therefore we finished the proof of this proposition. 
+\end{proof}
+\qed
+\\
+\\
+\begin{proposition}
+\label{cor:k>3}
+Suppose $\zeta = (T, f, H)$ is a $C(h,1,1)$-labelling with $\t_{h,1,1}(T) = \max\{2m+h, 2h+m-1\}$, where the height of $T$ is $k \ge 3$. If we increase the height of $T$ to $k+1$, we will get a new tree $T'$. Then $\zeta = (T', f, H)$ is also a $C(h,1,1)$-labelling with $\t_{h,1,1}(T') = \max\{2m+h, 2h+m-1\}$.  
+\end{proposition}
+\begin{proof}
+\end{proof}
+\qed
+
+\begin{proposition}
+\label{prop:consecutive}
+Let $T$ be a complete $m$-ary tree with height $k \ge 3$. Then for every vertex $u \in V(T)$ with degree $deg(u) = \Delta = m+1$, we can find a $C(h,1,1)$-labelling of $T$ such that the neighbours of $u$ bear a set of consecutive labels. 
+\end{proposition}
+
+\begin{proof}
+We will prove this proposition by showing that the following labelling is a $C(h,1,1)$-labelling, and it signs consecutive labels to the neighbours of any vertex in $T$ with degree $\Delta$. The labelling is very simple, since here we only give a general way to label $T$. 
+\begin{enumerate}[(1)]
+\item Find a vertex $u \in V(T)$ such that $deg(u) = \Delta$ and $d_T(u, u_0) = 1$. Without loss of generality, label $u$ by $0$ and $N(u)$ by $[h, h+\Delta - 1]$. i.e. $f(u) = 0$ and $f(N(u)) = [h, h+\Delta -1]$
+\item For a vertex $v \in N(u)$ such that $deg(v) = \Delta$, only $v$ and one of its neighbour $u$ have been labelled, then $N(v) \setminus u$ satisfy 
+\begin{enumerate}[(i)]
+\item $f(N(v) \setminus u) \in H \setminus \left(f(N(u)) \cup \{f(u)\} \right)$
+\item $| f(N(v) \setminus u) - f(v) | \ge h$
+\end{enumerate}
+\end{enumerate}
+It is obvious that the above labelling satisfy conditions of $C(h,1,1)$-labelling. The remaining work is to show that this labelling signs consecutive labels to $N(u)$ if $deg(u) = \Delta$. 
+
+Step $(1)$ ensures $N(u)$ receives consecutive labels. Step $(2)$ (i) tells us that $f(N(v) \setminus u)$ consists of two consecutive segments. (ii) tells us that  we need to delete more labels from $H \setminus \left(f(N(u)) \cup \{f(u)\} \right)$. Since $H \setminus \left(f(N(u)) \cup \{f(u)\} \right)$ is a consecutive set and $f(v) \in f(N(u))$, then the result set is also a consecutive set. 
+\end{proof}
+

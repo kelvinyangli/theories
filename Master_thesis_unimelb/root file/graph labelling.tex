@@ -1,0 +1,384 @@
+\documentclass[11pt, a4paper]{book}
+
+
+
+\usepackage{latexsym}
+\usepackage{float}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{color}
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{enumerate}
+\usepackage{natbib}
+%\usepackage{showkeys}
+\usepackage{float} 
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{setspace}
+%\usepackage[hmargin=3cm]{geometry}
+
+\usepackage{hyperref}
+
+
+\captionsetup{figurename=Fig., 
+                          labelfont=it, 
+                          textfont=small,
+                          labelsep=period
+                          }
+                          
+                                                 
+% clickable page number
+%\hypersetup{linktocpage,
+
+% clickable content
+\hypersetup{bookmarks=true,
+                       colorlinks=true,
+                       linkcolor=black,
+                       urlcolor=blue,
+                       citecolor=black
+                       }
+
+
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{comment}[theorem]{Comment}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+\newtheorem{claim}[theorem]{Claim}
+
+\input amssym.def
+\input amssym.tex
+
+\long\def\delete#1{}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\def\proof{\par\noindent{\bf Proof~}}
+\def\Proof{\par\noindent{\bf Proof of Theorem~}}
+%\def\qed{\ifmmode\square\else\nolinebreak\hfill$\square$\fi\par\vskip12pt}
+\def\qed{\hfill$\Box$\vspace{12pt}}
+
+\def\ov{\overline}
+\def\la{\langle}
+\def\ra{\rangle}
+\def\tr{{\rm tr}}
+\def\div{\,\Big|\,}
+\def\notdiv{\,{\not\Big|}\,}
+
+\def\BBB{\Bbb B}
+\def\CCC{\Bbb C}
+\def\FFF{\Bbb F}
+\def\ZZZ{\Bbb Z}
+\def\NNN{\Bbb N}
+\def\SSS{\Bbb S}
+
+\def\AA{{\cal A}}
+\def\BB{{\cal B}}
+\def\CC{{\cal C}}
+\def\DD{{\cal D}}
+\def\EE{{\cal E}}
+\def\FF{{\cal F}}
+\def\GG{{\cal G}}
+\def\JJ{{\cal J}}
+\def\KK{{\cal K}}
+\def\LL{{\cal L}}
+\def\NN{{\cal N}}
+\def\PP{{\cal P}}
+\def\QQ{{\cal Q}}
+\def\RR{{\cal R}}
+\def\SS{{\cal S}}
+\def\TT{{\cal T}}
+\def\XX{{\cal X}}
+\def\VV{{\cal V}}
+\def\II{{\cal I}}
+\def\HH{{\cal H}}
+
+
+\def\Q{{\rm Q}}
+\def\D{{\rm D}}
+\def\A{{\rm A}}
+\def\B{{\rm B}}
+\def\C{{\rm C}}
+\def\F{{\rm F}}
+\def\P{{\rm P}}
+\def\R{{\rm R}}
+\def\S{{\rm S}}
+\def\L{{\rm L}}
+\def\I{{\rm I}}
+\def\J{{\rm J}}
+\def\M{{\rm M}}
+
+\def\bfA{{\bf A}}
+\def\bfB{{\bf B}}
+\def\bfC{{\bf C}}
+\def\bfD{{\bf D}}
+\def\bfE{{\bf E}}
+\def\bfL{{\bf L}}
+\def\bfN{{\bf N}}
+\def\bfZ{{\bf Z}}
+\def\bfO{{\bf O}}
+\def\bfP{{\bf P}}
+\def\bfQ{{\bf Q}}
+\def\bfS{{\bf S}}
+\def\bfT{{\bf T}}
+
+\def\b0{{\bf 0}}
+\def\ba{{\bf a}}
+\def\bb{{\bf b}}
+\def\bc{{\bf c}}
+\def\bd{{\bf d}}
+\def\be{{\bf e}}
+\def\bi{{\bf i}}
+\def\bj{{\bf j}}
+\def\bk{{\bf k}}
+\def\bx{{\bf x}}
+\def\by{{\bf y}}
+\def\bz{{\bf z}}
+\def\bs{{\bf s}}
+\def\bt{{\bf t}}
+\def\bu{{\bf u}}
+\def\bv{{\bf v}}
+\def\bw{{\bf w}}
+
+\def\De{\Delta_{2}(T)}
+\def\Ga{\Gamma}
+\def\La{\Lambda}
+\def\Si{\Sigma}
+\def\Om{\Omega}
+\def\The{\Theta}
+
+
+\def\a{\alpha}
+\def\b{\beta}
+\def\d{\delta^*(T)}
+\def\g{\gamma}
+\def\lamh11{\lambda_{h,1,1}}
+\def\s{\sigma}
+\def\t{\tau}
+\def\ve{\varepsilon}
+\def\vp{\varphi}
+\def\p{\psi}
+
+%%%%%%% my own short cut %%%%%%%%%%%%
+\def\uij{u_{0\dots ij}}
+\def\uijk{u_{0\dots ijk}}
+\def\ujk{u_{0\dots jk}}
+\def\ujkl{u_{0\dots jkl}}
+\def\lnu{f(N(u_1))}
+\def\lcu{f(C(u_0))}
+\def\lcuu{f(C(u_1))}
+\def\gnu{g(N(u_1))}
+\def\gcu{g(C(u_0))}
+\def\gcuu{g(C(u_1))}
+
+
+\def\tmk{T_{m,k}}
+\def\tm2{T_{m,2}}
+\def\lamh11{\lambda_{h,1,1}}
+\def\lhpq{L(h,p,q)}
+\def\chpq{C(h,p,q)}
+\def\lamhpq{\lambda_{h,p,q}}
+\def\thpq{\t_{h,p,q}}
+\def\th11{\t_{h,1,1}}
+\def\kd{\KK_{2\Delta}}
+\def\kdd{\KK_{2\Delta-1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\def\Alt{{\rm Alt}}
+\def\Sym{{\rm Sym}}
+\def\Inn{{\rm Inn}}
+\def\Out{{\rm Out}}
+\def\Cay{{\rm Cay}}
+\def\Aut{{\rm Aut}}
+\def\aut{{\rm aut}}
+\def\soc{{\rm soc}}
+\def\wr{{\rm\,wr\,}}
+\def\Diag{{\rm Diag}}
+\def\Syl{{\rm Syl}}
+\def\PSL{{\rm PSL}}
+\def\PGL{{\rm PGL}}
+\def\PSU{{\rm PSU}}
+\def\PGU{{\rm PGU}}
+\def\SU{{\rm SU}}
+\def\SL{{\rm SL}}
+\def\GL{{\rm GL}}
+\def\AGL{{\rm AGL}}
+\def\PGL{{\rm PGL}}
+\def\AG{{\rm AG}}
+\def\PG{{\rm PG}}
+\def\GF{{\rm GF}}
+\def\CR{{\rm CR}}
+\def\GammaL{{\rm\Gamma L}}
+\def\AGammaL{{\rm A\Gamma L}}
+\def\PGammaL{{\rm P\Gamma L}}
+\def\PGammaU{{\rm P\Gamma U}}
+\def\U{{\rm U}}
+\def\PSp{{\rm PSp}}
+\def\Sp{{\rm Sp}}
+\def\PO{{\rm P\Omega}}
+\def\POmega{{\rm P\Omega}}
+\def\E{{\rm E}}
+\def\F{{\rm F}}
+\def\G{{\rm G}}
+\def\Sz{{\rm Sz}}
+\def\Ree{{\rm Ree}}
+
+\def\McL{{\rm McL}}
+\def\Ru{{\rm Ru}}
+\def\Ly{{\rm Ly}}
+\def\Co{{\rm Co}}
+\def\Fi{{\rm Fi}}
+\def\Th{{\rm Th}}
+\def\BM{{\rm BM }}
+\def\ON{{\rm O'N}}
+\def\HS{{\rm HS}}
+\def\Suz{{\rm Suz}}
+\def\He{{\rm He}}
+\def\Co{{\rm Co}}
+\def\HN{{\rm HN}}
+\def\HA{{\rm HA}}
+\def\AS{{\rm AS}}
+\def\TW{{\rm TW}}
+\def\PA{{\rm PA}}
+
+\def\arc{{\tt arc}}
+\def\Arc{{\tt Arc}}
+\def\AF{{\rm AF}}
+\def\CR{{\rm CR}}
+\def\TCR{{\rm TCR}}
+\def\girth{{\rm girth}}
+\def\Sim{{\tt Simple}}
+\def\val{{\tt val}}
+\def\fix{{\rm fix}}
+\def\det{{\rm det}}
+\def\gcd{{\tt gcd}}
+\def\diag{{\rm diag}}
+\def\Ker{{\rm Ker}}
+
+\def\cc{{$C_{p_{1}, p_{2}, p_{3}}$}}
+\def\ch{{$C_{p_{1}, p_{2}, p_{3}}(H)$}}
+
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt}
+\setlength{\footskip}{0in}
+\renewcommand{\footruleskip}{0pt}
+\fancypagestyle{plain}{%
+ \fancyhead{}
+ \renewcommand{\headrulewidth}{0pt}
+}
+
+
+\newcommand{\mymargin}[1]{\marginpar{\textcolor{cyan}{#1}}}
+
+\parskip 0.05in
+ 
+\begin{document}
+\onehalfspacing
+\begin{titlepage}
+
+\begin{center}
+
+
+% Upper part of the page
+
+\textsc{\LARGE University of Melbourne}\\
+{\large Department of Mathematics and Statistics}\\[1.5cm]
+
+\textsc{\Large Master Thesis}\\[0.5cm]
+
+
+% Title
+\HRule \\[0.4cm]
+{ \LARGE  \bf Solving distance three linear and cyclic metric labelling problems of complete $m$-ary trees }\\[0.4cm]
+
+\HRule \\[1.5cm]
+
+
+% Author and supervisor
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Yang \textsc{Li}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisors:} \\
+Associate Professor Sanming \textsc{Zhou}\\
+Dr. Deborah \textsc{King}
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+
+% Bottom of the page
+{\large October 28, 2011}
+
+\end{center}
+
+\end{titlepage}
+ 
+\frontmatter
+ 
+
+ \input{../abstract/abstract.tex}
+
+
+%\begin{romanpages}          % start roman page numbering
+\tableofcontents            % generate and include a table of contents
+\listoffigures              % generate and include a list of figures
+%\end{romanpages}            % end roman page numbering
+
+
+\mainmatter
+%\openup 0.5\jot \maketitle
+
+
+% content starts
+\input{../introduction/introduction.tex}
+\input{../trees/trees.tex}
+\input{../linearmetric/linearmetric.tex}
+\input{../cyclicmetric/cyclicmetric.tex}
+\input{../conclusion/conclusion.tex}
+\input{../appendix/appendix.tex}
+%\input{../bibliography/bibliography.tex}
+
+
+\bibliographystyle{plainnat}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\bibliography{../bibliography/myrefs}
+
+
+\end{document}
