@@ -1,0 +1,147 @@
+\documentclass{article}
+
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{subfigure}
+\usepackage{hyperref}
+
+\usepackage{amsthm, amsmath}
+\usepackage{tikz} % drawing graph
+\usetikzlibrary{arrows.meta} % drawing graph
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning,chains,fit,shapes,calc}
+%\usepackage{algpseudocode}
+
+\input amssym.def
+\input amssym.tex
+
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section] 
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{corollary}{Corollary}[section]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section] % definition numbers are dependent on theorem numbers
+\newtheorem{example}{Example}[section] % same for example numbers
+
+\newcommand{\cmt}[2][.5\linewidth]{\leavevmode\hfill\makebox[#1][l]{//~#2}}
+
+\title{15-455: Undergraduate Complexity Theory, Spring 2017, Ryan O'Donnell}
+
+
+\author{
+  Yang Li\\
+  Faculty of Information Technology\\
+  Monash University\\
+  Clayton, VIC, Australia \\
+  \texttt{yang.kelvinli@monash.edu} \\
+  %% examples of more authors
+}
+
+\begin{document}
+\maketitle
+
+\chapter{Lecture 6 SAT}
+
+formula-sat, cnf-sat, k-sat, 3-sat, 
+\section{CIRCUIT-SAT}
+
+\begin{definition}
+Boolean circuit $C$ is a DAG, in which nodes are called gates, and edges are called wires... usually has $n$ inputs and $1$ output... gates are and $\land$, or $\lor$, negation $\lnot$ with fan-in 2, 2, 1 respectively and arbitrary number of fan-out. 
+\end{definition}
+
+A circuit $C$ computes a Boolean function which maps $n$ bits strings into one bit $\{0,1\}^n \rightarrow \{0,1\}$. 
+
+You can think of circuit as a computational model.
+
+One circuit can only operations on inputs of a fixed length, because number of sources in the DAG is fixed. This is one of the main reason we don't use it as the first choice of our computational model. 
+
+When the input to algorithm is a circuit $<C>$, we measure run time in terms of $n:=$ number of input gates and $m:=$ the number of total gates. These parameters are polynomially related to the input size, so if we only care if the algorithm can run in P time or not, whether the run time is measured by the size of the input or $n,m$ doesn't matter. $n \le m \le |<C>| \le O(m\log m)$. 
+
+\begin{definition}[circuit-eval]
+given $<C,x=\{0,1\}^n>$, what is $C(x)$? This can also be written into a language $\{<C,x>: C(x)=1\}$.
+\end{definition}
+This can be computed in P time. It's the same as checking an answer of a circuit. Roughly speaking, you can do it in $O(m)$. 
+
+\begin{definition}[circuit-sat]
+given $<C>$, is there an $x$ s.t. $C(x)=1$? That is, $\{<C>: \exists x s.t. C(x)=1\}$.
+\end{definition}
+Brute force, try all $2^n$ xs, find the one that gives the true answer. This is probably the best we can do. We think that it can be done in P iff $P=NP$.
+
+\section{FORMULA-SAT}
+
+\begin{definition}
+A formula is a circuit where all the fan-outs are $1$. 
+\end{definition}
+eg, $(x_1 \land x_2) \land (x_2 \lor x_3)) \lor (\lnot(x_1 \land x_2))$. A circuit can be represented by a formula. 
+
+Formula-sat is a special case of a circuit-sat. Any formula is an example of a circuit. It's potentially easier, but we still don't have a smarter way of computing it. 
+
+\section{CNF-SAT}
+
+\begin{definition}
+Special case of formula-sat, where the formula is a conjunction of clauses, and a clause is a disjunction of literals, a literal is a variable or its negation. 
+\end{definition}
+
+For a cnf problem, $n$ is the number of variables, and $m$ is the number of clauses. It's a potential even easier problem. It is in EXP time $O(2^nm)$. It is NP-complete. 
+
+\begin{definition}
+k-sat is a special case of cnf-sat, where all clauses have at most $k$ literals. 
+\end{definition}
+it's potential easier than cnf. A popular example is 3-sat. WLOG, in 3-sat, $m \le O(n^3)$, this is over counting a lit, but it's ok. We know it's NP-complete. It's in time $1.34^n$.
+
+4-sat is in $1.5^n$, 5-sat in $1.6^n$, 6-sat $1.667^n$,..., k-sat in tim $(2-2/k)^n poly(n)$. 2-sat is in polynomail time. 
+
+\begin{theorem}
+2-sat is in P. 
+\end{theorem}
+
+e.g. input: $(x_1\lor x_2)\land(x_1 \lor \Bar{x_3}) \land (\Bar{x_1} \lor x_2) \land (x_2 \lor x_3) \land (\Bar{x_3})$
+
+\begin{proof}
+observation: $(x_1 \lor x_2) = (\Bar{x_1} \rightarrow x_2) = (\Bar{x_2} \rightarrow x_1)$ because of the truth table for disjunction $(x_1 \lor x_2)$ is the same as the truth table for the implication $(\Bar{x_1} \rightarrow x_2)$. See  \url{https://en.wikipedia.org/wiki/Truth_table}
+
+rewrite the above expression using the $\rightarrow$ formulas, using both directions. ie., $(\Bar{x_1} \rightarrow x_2) \land (\Bar{x_2} \rightarrow x_1) \land \dots$
+
+draw a directed graph with $2n$ vertices, one for each literal and $2m$ directed edges, one for each implication. 
+
+key observation of the directed graph: if $l_i \rightarrow l_j$ is an edge, $l$ is a literal, then there is also an edge $\Bar{l_j} \rightarrow \Bar{l_i}$. 
+
+There is $\Bar{x_2} \rightarrow x_1 \rightarrow x_2$, i.e, there is a path $\Bar{x_2} \rightarrow x_2$. In any satisfiable assignment, $x_2$ better be TRUE. 
+
+Suppose exists a path $x_2 \rightarrow \Bar{x_2}$, then $x_2$ better be FALSE. 
+
+If fomr some $i$, there exists a path $x_i \rightarrow \Bar{x_i}$ and $\Bar{x_i} \rightarrow x_i$, then the instance is unsatisfiable. call them contradictory path. 
+
+In poly(n) time, can check whether exists contradictory paths. 
+
+It remains to show that if there is no such contradictory path,  then it is satisfiable. 
+
+assume for al $i$, we don't have contradictory path. 
+\end{proof}
+
+\newpage 
+\bibliographystyle{abbrvnat}
+\bibliography{references}
+
+
+
+\end{document}
