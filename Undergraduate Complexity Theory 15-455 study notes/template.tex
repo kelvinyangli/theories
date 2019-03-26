@@ -59,10 +59,21 @@
 \begin{document}
 \maketitle
 
-\chapter{Lecture 6 SAT}
+\section{Lecture 1 Overview}
 
-formula-sat, cnf-sat, k-sat, 3-sat, 
-\section{CIRCUIT-SAT}
+\section{Lecture 2 Turing Machine}
+
+\section{Lecture 3 Simulations and Turing Machine Variants}
+
+\section{Lecture 4 Time Complexity and Universal Turing Machine}
+
+\section{Lecture 5 Time Hierarchy Theorem}
+
+\section{Lecture 6 Problems in P}
+
+\section{Lecture 7 SAT}
+
+\subsection{CIRCUIT-SAT}
 
 \begin{definition}
 Boolean circuit $C$ is a DAG, in which nodes are called gates, and edges are called wires... usually has $n$ inputs and $1$ output... gates are and $\land$, or $\lor$, negation $\lnot$ with fan-in 2, 2, 1 respectively and arbitrary number of fan-out. 
@@ -86,7 +97,7 @@ given $<C>$, is there an $x$ s.t. $C(x)=1$? That is, $\{<C>: \exists x s.t. C(x)
 \end{definition}
 Brute force, try all $2^n$ xs, find the one that gives the true answer. This is probably the best we can do. We think that it can be done in P iff $P=NP$.
 
-\section{FORMULA-SAT}
+\subsection{FORMULA-SAT}
 
 \begin{definition}
 A formula is a circuit where all the fan-outs are $1$. 
@@ -95,7 +106,7 @@ eg, $(x_1 \land x_2) \land (x_2 \lor x_3)) \lor (\lnot(x_1 \land x_2))$. A circu
 
 Formula-sat is a special case of a circuit-sat. Any formula is an example of a circuit. It's potentially easier, but we still don't have a smarter way of computing it. 
 
-\section{CNF-SAT}
+\subsection{CNF-SAT}
 
 \begin{definition}
 Special case of formula-sat, where the formula is a conjunction of clauses, and a clause is a disjunction of literals, a literal is a variable or its negation. 
@@ -106,7 +117,11 @@ For a cnf problem, $n$ is the number of variables, and $m$ is the number of clau
 \begin{definition}
 k-sat is a special case of cnf-sat, where all clauses have at most $k$ literals. 
 \end{definition}
-it's potential easier than cnf. A popular example is 3-sat. WLOG, in 3-sat, $m \le O(n^3)$, this is over counting a lit, but it's ok. We know it's NP-complete. It's in time $1.34^n$.
+it's potential easier than cnf. 
+
+\subsection{3-sat}
+
+A popular example is 3-sat. WLOG, in 3-sat, $m \le O(n^3)$, this is over counting a lit, but it's ok. We know it's NP-complete. It's in time $1.34^n$.
 
 4-sat is in $1.5^n$, 5-sat in $1.6^n$, 6-sat $1.667^n$,..., k-sat in tim $(2-2/k)^n poly(n)$. 2-sat is in polynomail time. 
 
@@ -138,9 +153,70 @@ It remains to show that if there is no such contradictory path,  then it is sati
 assume for al $i$, we don't have contradictory path. 
 \end{proof}
 
-\newpage 
-\bibliographystyle{abbrvnat}
-\bibliography{references}
+\section{NP}
+3-sat is in P iff circuit-sat is in P iff 3-colorable is in P iff k-clique is in P iff every language in NP is in P. 
+
+\textbf{Conjecture}: $P \neq NP \iff 3-sat \notin P$.
+
+\textbf{Conjecture Exponential time hypothesis (ETH)}: $\exists \delta > 0$ s.t. 3-sat $\notin Time((1+\delta)^n)$.
+
+\textbf{Conjuecture Strong ETH}: $\forall \delta > 0$, $\exists k$ s.t. k-sat $\notin TIME((2-\delta)^n)$. 
+This is almost the same as saying that CNF with no upperbound on k has no better algorithm than just $2^n$. 
+
+The first conjecture is weaker than the 2nd that is weaker than the last. The last conjecture also implies that $\forall \epsilon > 0$, cannot solve the longest common subsequence problem in time $O(n^{2-\epsilon})$.
+
+\subsection{NP}
+idea: for many problems there exists brute force algorithms enumerate (exponentially many) candidate solutions and in p-time check if each one is a genuine solution. 
+
+Two features: candidate solutions are encodable by strings $y$ with polynomial length $|y| \le poly(|x|)$. That is, candidate solutions are not extremely long comparing with the input size; there exists an efficient algorithm to check if a candidate solution is a genuine solution. 
+
+Roughly: NP is the class of decision problems/languages with those two features. 
+
+Un 3-colorable problem is highly believed to not be in NP. 
+
+\begin{definition}
+An algorithm (TM) V is a verifier for language L if 
+\begin{itemize}
+    \item V takes as input a pair $<x,y>$;
+    \item $\forall x$, $x \in L \iff \exists y$ s.t. $V(<x,y>=$accept.
+\end{itemize}
+\end{definition}
+
+\begin{definition}
+Verifier $V$ is said to polynomial time if $V<x,y>$ runs in time $O(|x|^k)$ for some $k \in N$
+\end{definition}
+Sublty: V's running time is measured in terms of $|x|$.
+
+\begin{definition}
+$NP=\{L \mid L \text{ has a P-time verifier}\}$.
+\end{definition}
+
+Example: proving squares $= \{x \mid x=<B>, B \in N \text{ is a perfect square }\}$ is in NP. Proof is omitted by me...
+
+3-colorable is in NP, proof is omitted... two main steps. Firstly, there exists a p-time verifier V. Secondly, if G is 3-col then V accepts. If V accepts then G is 3-col. 
+
+Roughly, P is all the decision problems where deciding if there is a genuine solution can be done efficiently. NP is the set of problems where checking if a candidate solution is a genuine solution can be done efficiently. 
+
+$P \subseteq NP \subseteq EXP$. Recall $P \neq EXP$ by THT, so $P\neq NP$ and/or $NP \neq EXP$. We can't prove $P\neq NP$ or $NP \neq EXP$, but we can prove $P \neq EXP$. 
+
+\begin{proof}
+Let $L\in P$, wts $L \in NP$. Proof omitted... 
+\end{proof}
+
+\begin{proof}
+P = NP iff 3-sat is in P by Cook-Levin theorm...
+\end{proof}
+
+
+
+
+
+
+
+
+%\newpage 
+%\bibliographystyle{abbrvnat}
+%\bibliography{references}
 
 
 
