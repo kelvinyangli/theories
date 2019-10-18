@@ -1,0 +1,417 @@
+\documentclass[]{article}
+
+\usepackage{xcolor}
+\usepackage{amsmath} % basic maths symbols 
+\usepackage{amsthm} % define proof environment
+\usepackage{amsfonts} % extended maths symbols and fonts 
+%\usepackage{algorithm2e}
+
+\newtheorem{theorem}{Theorem}[section] 
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{definition}{Definition}[section] % definition numbers are dependent on theorem numbers
+\newtheorem{proposition}{Proposition}[section] % same for example numbers
+
+%opening
+\title{The algorithmic foundations of adaptive data analysis: outline}
+\author{Kelvin Li}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This is the outline of the course \textit{The algorithmic foundations of adaptive data analysis} given by Aaron Roth at the University of Pennsylvania. 
+\end{abstract}
+
+The fundamental problem of machine learning is to study the underlying (unknown) distribution $\mathcal{D}$ through samples from $\mathcal{D}$. Learning is often an optimization problem that tries to minimize the generalization error\footnote{Generalization error is the difference between the expected and empirical errors.} w.r.t. a loss function. \textit{Overfitting} (or \textit{false discovery}) is a problem that people try but not always avoid during learning (or experiment). The more overfitting occurs, the larger the generalization error. In machine learning, models are trained and tested using non-overlapping training and testing data sets respectively to avoid overfitting (sometimes even validation set to tune parameters). In experimental science, statistical hypotheses are stated up-front before collecting data (a.k.a., pre-registration) to avoid \textit{p-hacking (p-fishing)}. 
+
+The way how research is done today is through an \textit{adaptive} fashion, where the current trained model or hypothesis is selected based on some (if not all) of the results achieved in previous studies. In other words, the current model or hypothesis is a function of the data (indirectly). If the learning process is not treated properly, there is a high risk that the model will overfit or the discovery is a false finding.
+
+Given a class $\mathcal{Q}$ of queries (or functions), using VC-dimension one is able to work out the sample complexity in order for the entire class of queries to generalize to the underlying distribution. In such a case, regardless a set of $k$ queries are chosen adaptively or nonadptively from $\mathcal{Q}$ by an analyst, these queries will always generalize. The focus of adaptive data analysis is to prove generalization bound without making any assumptions about the query class $\mathcal{Q}$. This relies on the result that \textbf{stability implies generalization}.
+
+This course studies some of the fundamental topics in \textit{adaptive data analysis}, including some of the basic results from \textit{statistical learning theory} and \textit{differential privacy}. The entire course consists of 20 lectures. 
+
+
+\section{Preliminary}
+
+\subsection{Lecture 1}
+Throughout this course, we use a (SQL) \textit{query} to replace the concept of learning or experiment. In particular, we focus on \textit{statistical queries}. Let $\mathcal{X}$ denote an input domain, $X$ a random variable, $\mathcal{D}$ denote a probability distribution of $\mathcal{X}$ and $S\sim \mathcal{D}$ denote a data set whose records are sampled \textit{i.i.d.} from $\mathcal{D}$.
+
+\begin{definition}
+	A \textbf{statistical query} is a function $\phi:\mathcal{X} \rightarrow [0,1]$ such that the value of $\phi$ on a distribution $\mathcal{D}$ is 
+	\begin{align}
+		\phi(\mathcal{D}) = E_{X \sim \mathcal{D}}(\phi(X))
+	\end{align}
+	and the value of $\phi$ on a data set $S$ is 
+	\begin{align}
+		\phi(S) = \frac{1}{n} \sum_{i =1}^n \phi(x_i).
+	\end{align}
+\end{definition}
+The former is also known as \textit{population parameter} and the latter is known as \textit{sample parameter}. 
+ 
+The rest of this lecture introduces some of the basic concentration inequalities that provide bounds on how a random variable deviates from its expected value (or other values that we are interested in). The reason to bring in these inequalities is because we want to develop \textit{mechanisms} that ensure a (adaptive or non-adaptive) query is accurate w.r.t. the data or underlying distribution with high probability. 
+
+\begin{theorem} (\textbf{Markov inequality})
+	For any non-negative random variable $X$ and any $a > 0$,
+	\begin{align*}
+		P(X \ge a) \le \frac{E(x)}{a}.
+	\end{align*}
+\end{theorem}
+This result is not so useful for our purpose except it derives the Chebyshev's inequality. 
+
+\begin{theorem} (\textbf{Chebyshev's inequality})
+	For any random variable $X$ with mean $\mu=E[X]$ and variance $\sigma^2=E[(X-\mu)^2]$, we have 
+	\begin{align*}
+		P(|X-\mu| \ge k\sigma) \le \frac{1}{k^2}.
+	\end{align*}
+\end{theorem}
+
+Here is an application of Chebyshev's inequality. Let $\sigma^2 = \frac{1}{4n}$ and $k^2 = \frac{1}{\beta}$, we get 
+\begin{align*}
+	P\left(|X-\mu| < \sqrt{\frac{1/\beta}{4n}}\right) \ge 1 - \beta.
+\end{align*}
+To obtain a small error $|X-\mu| < \alpha$, it suffices to have $\sqrt{\frac{1/\beta}{4n}} \le \alpha$. Solve for $n$, we get the \textit{sample complexity} $n\ge \frac{1/\beta}{4\alpha^2}$. Both $\alpha$ and $\beta$ are arbitrarily small. The sample size increases linearly with $1/\beta$. Here, $\alpha,\beta$ can be considered as error and the chance of making such an error. 
+
+A better bound is the \textit{Chernoff bound} that uses the assumption that each trial is independent. There are several variations of Chernoff bound, based on slightly different assumptions. 
+
+\begin{theorem} (\textbf{Chernoff bound})
+	Let $X:= \sum_{i=1}^n X_i$ where $X_i$ are i.i.d . random variables taking values in $[0,1]$ and $\mu = E[X]$. Then 
+	\begin{align*}
+		P(|X-\mu| \ge t) \le 2e^{-2t^2/n}.
+	\end{align*}
+\end{theorem}
+To obtain $P(|X-\mu| \le \alpha) \ge 1-\beta$, it suffices if the sample complexity $n \ge \frac{\ln 2/\beta}{2\alpha^2}$. This is an improvement over the previous result, since the sample size increases logarithmically with $1/\beta$.
+
+\subsection{Lecture 2}
+Define a query answering \textit{mechanism} $M$ that takes a query $\phi_i$ and a data set $S \sim \mathcal{D}$ as inputs and outputs an answer $a_i$. There are different types of mechanisms, such as the \textit{empirical mechanism} that answers a query using the sample mean $a_i = \phi_i(S)$, the \textit{noise addition mechanism} that adds some noise to the sample mean $a_i = \phi_i(S) + Lap(\cdot)$, etc. 
+
+The performance of a mechanism is measured by the \textcolor{red}{worst absolute error} w.r.t. the distribution $\mathcal{D}$ (or sample $S\sim \mathcal{D}$). 
+
+\begin{definition}
+	A query answering mechanism $M$ is \textbf{$(\alpha,\beta)$-accurate} w.r.t. the underlying distribution $\mathcal{D}$ for $k$ adaptively chosen statistical queries $K=\{q_1,\dots,q_k\} \subseteq Q$ from a query class if for its answers $\{a_1, \dots, a_k\}$ the following holds
+	\begin{align*}
+	P\left(\sup_{q_i \in K}|q_i(\mathcal{D}) - a_i| \le \alpha \right) \ge 1 - \beta.
+	\end{align*}
+\end{definition}
+The definition of \textbf{$(\alpha,\beta)$-accurate} w.r.t. the data set $S \sim \mathcal{D}$ is defined analogously by replacing $q_i(\mathcal{D})$ with $q_i(S)$. 
+
+\begin{theorem} (\textbf{Union bound})
+	For every set of $k$ events $E_1, \dots, E_k$ in the same probability space, the probability of their union is at most the sum of their probabilities 
+	\begin{align*}
+		P\left(\bigcup_{j=1}^k E_j\right) \le \sum_{j=1}^k P(E_j).
+	\end{align*}
+\end{theorem}
+
+By Chernoff bound and Union bound, we can obtain the following bound for $k$ nonadaptive statistical queries.
+
+\begin{theorem} (\textbf{Nonadaptive queries})
+	\label{theorem:nonadaptive queries}
+	Let $\mathcal{D}$ be a distribution on the set $\mathcal{X}$ and $\phi_1, \dots, \phi_k$ be statistical queries with expectations $\mu_j=E_{\mathcal{D}}[\phi_j]$. If $S \sim D^n$ is a data set of size $n$ drawn i.i.d. from $\mathcal{D}$, then 
+	\begin{align*}
+		P\left(\max_{j=1,\dots,k}|E_S[\phi_j] - \mu_j| \le \sqrt{\frac{\ln(2k/\beta)}{2n}} \right) \ge 1 - \beta.
+	\end{align*}
+\end{theorem}
+
+The sample complexity is $n \ge \frac{\ln (2k/\beta)}{2\alpha^2}$, which increases logarithmically with the number of queries $k$, given $\alpha$ and $\beta$ are fixed. For example, if $n=100000$ and $\alpha=\beta=0.01$, we can ask $k=2425826$ nonadaptive queries without violating the probability bound. 
+
+\subsection{Lecture 3}
+Adaptive queries can easily overfit. For example, if a data set $S = \{1,2,3,4\}$, then construct the first query $q_1(S) = binary(\sum_{x \in S}1/2^x)$ to output the binary representation of the sum of each $1/2^x$. This is a histogram of the data set $S$. Then construct the second query to overfit. 
+
+\begin{remark}
+	Overfitting (or adversarial attack) appears when learning the identity of each record in a data set $S$, then carefully tailoring the subsequent queries to perfectly fit (or attack) $S$. So any method of answering statistical queries which promises protection from overfitting must in some sense prevent the analyst (or adversary) from learning too much about too many individual data points in $S$. 
+\end{remark}
+
+To get a probability bound on the worst error of adaptive queries, we cannot just use the worst error among the $k$ queries that have been asked, because the queries are not stated up-front like in the nonadaptive case. To use Chernoff bound and union bound, the union should be taken over all possible queries that could have been asked, had the answers of the previous queries come up differently. Assuming each of the $k$ queries that was asked is a binary function. The space of all queries can be thought as a \textit{Garden of Forking Paths} (or decision tree). The $k$ queries that were asked is a particular path on the decision tree. But there are in total $2^k$ possible combinations of queries that could have been asked. Therefore, by the same argument as in Theorem \ref{theorem:nonadaptive queries} (i.e., Chernoff bound and Union bound), the sample complexity of adaptive queries is $n \ge \frac{k + \ln 2 / \delta}{2\epsilon^2}$, which scales linearly with the number of queries $k$. The problem is that it is not always plausible to list all possible queries that could have been asked in order to find the worst error. So what can we do? In addition, Can we improve the sample complexity?
+
+
+\section{Description length bounds}
+
+Develop \textit{transcript compressible} statistical estimators that allow us to control how much the analyst overfits the data, while allowing the analyst to still perform useful analyses. 
+
+Here, description length is the two part description length (according to \textbf{Occam's Razor}), where the first part corresponds to the model itself (including the number of parameters and their precision) and the second part corresponds to the compression of the data set given the model. The idea is that shorter description length estimators have lower generalization error. This can be thought from the model complexity perspective where an overly complicated model has longer description length and also higher risk of capturing random noise in the data. It can also be understood from the privacy perspective, where an overly complicated model fits every data point almost perfectly, hence reveals too much information about the data set, which then leads to a higher risk of being attacked. 
+
+\subsection{Lecture 4}
+ 
+Let $\mathcal{A}, \mathcal{O}, \mathcal{Q}$ and $S$ denote an analyst, a statistical estimator, a space of statistical queries and a data set respectively. For $i \in [1,k]$, the analyst $\mathcal{A}$ chooses a query $q_i \in \mathcal{Q}$ and gives it to the estimator $\mathcal{O}$. The estimator $\mathcal{O}$ generates an answer $a_i$ to $q_i$ based on the data set $S$ and gives $a_i$ to the analyst $\mathcal{A}$. Denote this \textbf{interaction} between $\mathcal{A}$ and $\mathcal{O}$ by  $GT(\mathcal{A},S,\mathcal{O},\mathcal{Q})$. 
+
+\begin{definition}
+	 The output $T = (q_1, a_1, \dots, q_k, a_k)$ of the interaction $GT(\mathcal{A},S,\mathcal{O},\mathcal{Q})$ is called the \textbf{transcript}.
+\end{definition}
+
+\begin{definition}
+	A statistical estimator $\mathcal{O}$ is \textbf{$(\alpha,\beta)$-accurate} w.r.t. the underlying distribution $\mathcal{D}$ for $k$ queries from $\mathcal{Q}$ if for every algorithm $\mathcal{A}$ and for every distribution $\mathcal{D}$, the transcript $T$ generated by $GT(\mathcal{A},\mathcal{D},\mathcal{O},\mathcal{Q})$ satisfies 
+	\begin{align*}
+		P\left(\max_{i=1}^k|q_i(\mathcal{D}) - a_i| \le \alpha \right) \ge 1 - \beta.
+	\end{align*}
+\end{definition}
+
+\textbf{$(\alpha,\beta)$-accurate} w.r.t. the data set $S \sim \mathcal{D}$ can be defined similarly by replacing $q_i(\mathcal{D})$ by $q_i(S)$. Although we want to design random estimators, but it suffices to look at deterministic estimators and prove they are accurate. 
+
+\begin{definition}
+	A statistical estimator $\mathcal{O}$ for $k$ queries from $\mathcal{Q}$ is \textbf{transcript compressible} to $b(n,k)$ bits if for every analyst $\mathcal{A}$ there is a set of transcripts $H_A$ of size $|H_A| \le 2^{b(n,k)}$ such that for every data set $S$ 
+	\begin{align*}
+		P(GT_{n,k}(\mathcal{A},S,\mathcal{O},\mathcal{Q}) \in H_A) = 1.
+	\end{align*}
+\end{definition}
+
+\begin{theorem}
+	Any $b(n,k)$-compressible estimator $\mathcal{O}$ for statistical queries will have the property that for every data analyst $\mathcal{A}$ and every distribution $\mathcal{D}$, if $S \sim \mathcal{D}$ and $h=GT(\mathcal{A},S,\mathcal{O},\mathcal{Q})$, then the following is satisfied 
+	\begin{align*}
+		P\left(\max_{i=1}^k |q_i(S) - q_i(\mathcal{D})| \le \sqrt{\frac{(b(n,k)+1)\ln 2 + \ln (k/\beta)}{2n}}\right) \ge 1 - \beta.
+	\end{align*} 
+\end{theorem}
+This theorem tells us that the queries (generated by the estimator) do not substantially overfit the data set $S$, but we do not know if the answers to these queries are accurate w.r.t the distribution, because we do not compare $a_i$ and $q_i(\mathcal{D})$. For example, we can easily construct a estimator that always return a constant value. This estimator has description length $0$, but is not accurate at all. 
+
+The following transfer theorem is the main result for this section. A similar transfer theorem can also be proved for differential private mechanism (later in this course). 
+
+\begin{theorem} (\textbf{Transcript compressibility transfer theorem})
+	For any $\beta'' > 0$, a statistical estimator $\mathcal{O}$ for statistical queries that is 
+	\begin{enumerate}
+		\item $b(n,k)$-compressible and 
+		\item $(\alpha',\beta')$-accurate w.r.t. a data set $S \sim \mathcal{D}$
+	\end{enumerate}
+	is $(\alpha,\beta)$-accurate w.r.t. the distribution $\mathcal{D}$, where $\beta = \beta'+\beta''$ and 
+	\begin{align*}
+		\alpha = \alpha' + \sqrt{\frac{(b(n,k)+1)\ln 2 + \ln (k/\beta'')}{2n}}
+	\end{align*}
+\end{theorem}
+Note that the theorem is also applicable to \textit{low sensitivity queries}.
+
+\subsection{Lecture 5}
+
+Two important characteristics that compressible estimators must have are the \textit{robustness to post-processing} and \textit{composability}.
+
+Robustness to post-processing guarantees that an analyst, without additional knowledge about the private data set, cannot compute a function of the output of a statistical estimator and make its \textcolor{red}{second part} description length longer. That is, compress/fits the data set better. 
+\begin{theorem} (\textbf{Post-processing for transcript compressibility})
+	Suppose $\mathcal{O}: \mathcal{Q} \rightarrow \mathcal{R}$ is b-transcript compressible. Let $f:\mathcal{Q} \cup \mathcal{R} \rightarrow \mathcal{Q} \cup \mathcal{R}$ be an arbitrary stateful algorithm. Then $f \circ \mathcal{O}$ is also b-transcript compressible. 
+\end{theorem}
+
+Composability ensures that if all estimators are transcript compressible, so will their combination. Hence, we can build more sophisticated estimators using a combination of several compressible estimators. \textcolor{red}{Later in the course we will see that given the privacy budget, we can work out the privacy budget for each query.}
+
+\begin{theorem} (\textbf{Composition for transcript compressibility})
+	Suppose $\mathcal{O}_1: \mathcal{Q} \rightarrow \mathcal{R}$ is transcript compressible to $b_1(n,k_1)$ bits, and $\mathcal{O}_2: \mathcal{Q} \rightarrow \mathcal{R}$ is transcript compressible to $b_2(n,k_2)$ bits. Then the composition $(\mathcal{O}_1,\mathcal{O}_2)$ is transcript compressible to $b(n,k_1+k_2) = b_1(n,k_1)+b_2(n,k_2)$ bits. 
+\end{theorem}
+
+An example is the statistical estimator that returns the empirical mean of statistical queries, but to a truncated number of digits of precision. By truncating the digits, we reduced the first part of the description length (i.e., reduced the model complexity). It can be proved that this estimator is accurate as well as lowering the risk of overfitting. For example, apply this estimator to the binary representation example before. We will not get the exact histogram of the records.  
+
+\subsection{Lecture 6}
+More examples of accurate transcript compressible statistical estimators. 
+
+
+\section{Stability and generalization (Lecture 7 - 10)}
+
+\subsection{Algorithmic stability}
+
+In general, an algorithm is \textit{stable} if changing one record in the input data will not change much of its output. Define stability in the context of classification. 
+\begin{definition}
+	A deterministic algorithm $M$ is \textbf{$\epsilon$-uniform change-one ($\epsilon$-UCO) stable} if for all data set $S$ and $S'$ that differ in one record, and for all inputs $z \in \mathcal{X}'$, 
+	\begin{align*}
+		|h_S(z) - h_{S'}(z)| \le \epsilon,
+	\end{align*}
+	where $h(\cdot)$ is a hypothesis/classifier and $z$ is a point to be classified.
+\end{definition}
+
+Generally speaking, a simpler classifier is more stable than a complicated one. Think about a linear and higher order classifiers. Denote the distributional and empirical accuracy respectively by 
+\begin{align*}
+	acc_{\mathcal{D}}(h) &= 1 - E_{\mathcal{D}}[|\hat{y}-h_S(\hat{x})|] \\
+	acc_{S}(h) &= 1 - \frac{1}{n}\sum_{i=1}^{n}(|y_i-h_S(x_i)|).
+\end{align*}
+
+The next theorem proves that stability implies generalization. 
+\begin{theorem}
+	Let $M$ be an $\epsilon$-UCO stable algorithm. For every data distribution $\mathcal{D}$ over labelled pairs in $\mathcal{X} \times \{0,1\}$, the expected generalization error of the classifier satisfies 
+	\begin{align*}
+		\left|E_{S \sim \mathcal{D}}[acc_S(h_S) - acc_{\mathcal{D}}(h_S)] \right| \le \epsilon
+	\end{align*} 
+\end{theorem}
+
+In other words, patterns that are recognized in the training data by a stable classifier are likely to appear in the underlying distribution too. 
+
+Adaptive data analysis concerns the interaction between an analyst and a query answering mechanism. Even the mechanism is guaranteed to be stable (e.g., a stable classification algorithm), can we guarantee that the analyst and mechanism pair is also stable after a certain number of interactions? \textbf{That is, is a stable mechanism closed under post-processing?  }
+
+\subsection{Distributional stability}
+To answer the above question, we look at the distribution of the outputs of an mechanism and comparing this distribution with another output distribution from the same mechanism with a \textit{neighbouring data set} (i.e., different by one record). Before doing so, we introduce three ``distance measures'' between distributions. 
+
+Let $P$ and $Q$ be two distributions on some set $\mathcal{Y}$ and share the same set of events for which probabilities are defined. 
+\begin{definition}
+	The \textbf{total variation distance} between $P$ and $Q$ is 
+	\begin{align*}
+		d_{TV}(P,Q) &= \sup_{E \subseteq \mathcal{Y}} |P(E) - Q(E)| \\
+		&= \frac{1}{2}\int_{y \in \mathcal{Y}} |P(y)-Q(y)| dy.
+	\end{align*}
+\end{definition}
+
+TVD is symmetric and always lies in $[0,1]$. It also satisfies the triangle inequality $d_{TV}(P,R) \le d_{TV}(P,Q) + d_{TV}(Q,R)$. 
+
+A flips a fair coin and samples a point $x \sim P$ if the outcome is head and $x \sim Q$ otherwise. B tries to guess the outcome of the flip from the point $x$. The success probability of B's best strategy in the game is $\frac{1}{2}(1+d_{TV}(P,Q))$. If $P,Q$ are non-overlapping, the success probability is $1$. If they are completely overlapping, the success probability is $0$. 
+
+\begin{definition}
+	The \textbf{multiplicative distance} between $P$ and $Q$ is 
+	\begin{align*}
+		d_{\diamond}(P,Q) = \sup_{E\subseteq \mathcal{Y}} \left|\ln \frac{P(E)}{Q(E)} \right| 
+		= \sup_{y \in \mathcal{Y}} \ln \frac{P(E)}{Q(E)}.
+	\end{align*}
+\end{definition}
+MD is symmetric, satisfies triangle inequality and lies in $[0,\infty)$. It upper bounds the TVD by $d_{TV}(P,Q) \le \frac{1}{2}\left(e^{d_{\diamond}(P,Q)} - 1 \right)$. 
+
+\begin{definition}
+	The \textbf{KL-divergence} between $P$ and $Q$ is 
+	\begin{align*}
+		D_{KL}(P || Q) = \int_{y \in \mathcal{Y}} P(y) \ln \frac{P(y)}{Q(y)}.
+	\end{align*}
+\end{definition}
+
+KLD is \textbf{NOT} symmetric. It is nonnegative. Below are some relations between these three distance measures. 
+
+\begin{lemma}
+	For any two distributions $P$ and $Q$, 
+	\begin{enumerate}
+		\item $d_{TV}(P,Q) \le \sqrt{\frac{1}{2}D_{KL}(P||Q)}$.
+		\item If $d_{\diamond}(P,Q) \le \epsilon$, then $D_{KL}(P||Q) \le \epsilon(e^{\epsilon}-1)$.
+	\end{enumerate}
+\end{lemma}
+
+The key result in this section is that all three measures remain the same stability after post-processing. 
+
+\begin{lemma}
+	Consider a randomized algorithm $A$ that maps elements in $\mathcal{Y}$ to (distributions over) elements in $\mathcal{Z}$. Then for any two random variables $X,Y$ taking values in $\mathcal{Y}$, we have 
+	\begin{align*}
+		d_{TV}(A(X),A(Y)) &\le d_{TV}(X,Y)\\
+        d_{\diamond}(A(X),A(Y)) &\le d_{\diamond}(X,Y)\\
+        D_{KL}(A(X),A(Y)) &\le D_{KL}(X,Y).
+	\end{align*}
+\end{lemma}
+For simplicity, use the $d_{TV}(X,Y)$ to denote the TVD between the distributions of $X,Y$.
+
+Define stability in terms of the above measures. 
+
+\begin{definition}
+	An randomized algorithm $M$ is $\epsilon$-TV stable if for all pairs of neighbouring data sets $S$ and $S'$, we have 
+	\begin{align*}
+		d_{TV}(M(S),M(S')) \le \epsilon.
+	\end{align*}
+\end{definition}
+The other two are defined similarly. Note, \textcolor{red}{stability w.r.t. multiplicative distance is the the same as $\epsilon$-differential privacy as we will see later in the course}.
+
+\subsection{Distributional stability implies generalization}
+Based on the results from the previous section, we can prove that if $M$ is a stable algorithm, then the interaction between an algorithm $A$ and $M$ has low generalization error. 
+
+\begin{theorem}
+	Let $M$ be $\epsilon$-TV stable and $A$ be any algorithm that uses the output of $M$ to decide on a statistical query $q_S=A(M(x))$. Then for any domain $\mathcal{X}$ and distribution $\mathcal{D}$
+	\begin{align*}
+		|E_{S \sim \mathcal{D}}[q_S(S) - q_S(\mathcal{D})]| \le \epsilon.
+	\end{align*}
+\end{theorem}
+
+\textcolor{red}{There is something that I do not understand in the lecture slides! It is about the expectation over the coins of $M$?} Since the measures are non-increasing under post-processing, the theorem can be simplified by dropping the algorithm $A$. 
+
+\begin{theorem}
+	Let $M$ be a $\epsilon$-TV stable algorithm which takes a data set $S \in \mathcal{X}^n$ as input and outputs a statistical query $q_S=M(x)$. Then for any domain $\mathcal{X}$ and distribution $\mathcal{D}$
+	\begin{align*}
+	|E_{S \sim \mathcal{D}}[q_S(S) - q_S(\mathcal{D})]| \le \epsilon.
+	\end{align*}
+\end{theorem}
+
+The following theorem bounds the expectation of the absolute value of the error.
+
+\begin{theorem}
+	Let $M$ be a $\epsilon$-TV stable algorithm which takes a data set $S \in \mathcal{X}^n$ as input and outputs a statistical query $q_S=M(x)$. Then for any domain $\mathcal{X}$ and distribution $\mathcal{D}$
+	\begin{align*}
+	E_{S \sim \mathcal{D}}[|q_S(S) - q_S(\mathcal{D})|] \le \epsilon + \frac{2}{\sqrt{n}}.
+	\end{align*}
+\end{theorem}
+
+Same as compressible estimators, we can also prove a transfer theorem for stable mechanisms. That is, if a mechanism is stable and accurate on samples, then it is also accurate on distribution. 
+
+\begin{theorem} (\textbf{Transfer theorem for TV-stable mechanisms})
+	If $M$ is $\epsilon$-TV stable and has expected worst case empirical error at most $\alpha$, then for every distribution $\mathcal{D}$ and for every analyst $A$, when $S \sim \mathcal{D}$, the expected population error of the mechanism is 
+	\begin{align*}
+		E_{S \sim \mathcal{D}}\left[\max_{j=1}^k |a_j - q_j(\mathcal{D})|\right] \le \epsilon+\alpha
+	\end{align*}
+\end{theorem}
+
+\begin{lemma}
+	If $M$ is $\epsilon$-TV stable, then for every distribution $\mathcal{D}$ and for every analyst $A$, when $S \sim \mathcal{D}$, the expected maximum generalization error of the mechanism is 
+	\begin{align*}
+	E_{S \sim \mathcal{D}}\left[\max_{j=1}^k |q_j(S) - q_j(\mathcal{D})|\right] \le \epsilon+\sqrt{\frac{\log k}{n}}.
+	\end{align*}
+\end{lemma}
+
+\subsection{Composition of distributional notions}
+
+Suppose we have an interactive mechanism $M$ that interacts with an analyst over $k$ rounds. We can break it into $k$ separate mechanisms $M_1, M_2, \dots, M_k$, where each of the mechanisms takes as input the original data set $S$ and the query $q_i$. We call $M$ the \textit{adaptive (sequential) composition} of $M_1, \dots, M_k$. 
+
+\begin{theorem} (\textbf{Distributional stability notions compose adaptively})
+	Let $M=(M_1,\dots,M_k)$ be the adaptive sequential composition of $k$ mechanisms. If each $M_i$ is $\epsilon$-TV (or $\epsilon$-KL or $\epsilon$-MD) stable, then the adaptive composition $M$ is $k\epsilon$-TV (or $\epsilon$-KL or $\epsilon$-MD) stable. 
+\end{theorem}
+
+The rest of these lectures are omitted. 
+
+
+\section{Differential privacy and adaptive data analysis}
+
+\subsection{Lecture 11}
+\begin{definition}
+	A randomized algorithm $M:\mathcal{X}^n \rightarrow \mathcal{Y}$ is \textbf{$(\epsilon,\delta)$-differentially private} if for all pairs of data sets $S, S'$ that differ in one record, for all events $E \subseteq \mathcal{Y}$, 
+	\begin{align*}
+		P(M(S) \in E) \le e^\epsilon P(M(S') \in E) + \delta
+	\end{align*} 
+\end{definition}
+
+Differentially private algorithms are distributional stable, and hence provide generalization guarantees. 
+
+\begin{definition}
+	A query $q:\mathcal{X}^n \rightarrow \mathbb{R}^d$ is \textbf{$\Delta$-sensitive} in the $l_1$ norm if for all pairs of neighbouring data sets $S = (x_1, \dots, x_i, \dots, x_n)$ and $S' = (x_1, \dots, x'_i, \dots, x_n)$, the following is satisfied 
+	\begin{align*}
+		||q(S) - q(S')||_1 \le \Delta
+	\end{align*}
+\end{definition}
+All statistical queries are $\Delta$-sensitive with $\Delta=1/n$.
+
+\textbf{Laplace mechanism}
+Input: Data set $S = (x_1, \dots, x_n) \in \mathcal{X}^n$ and parameter $\epsilon>0$. 
+\begin{enumerate}
+	\item Receive a $\Delta$-sensitive query $q:\mathcal{X} \rightarrow [0,1]$ from analyst.
+	\item Output $a_i = \frac{1}{n} \sum_{i=1}^{n} q(x_i) + Lap(0, \frac{\Delta}{\epsilon})$.
+\end{enumerate}
+
+\begin{lemma}
+	The Laplace mechanism is $\epsilon$-differentially private. If repeated $k$ times, the Laplace mechanism is $k\epsilon$-differentially private. 
+\end{lemma}
+
+\iffalse
+\begin{lemma}
+	The Gaussian mechanism is $(\epsilon,\delta)$-differentially private when $\sigma \ge \frac{2\Delta\sqrt{\ln 1/\delta}}{\epsilon}$, where $\Delta$ is the sensitivity of the query w.r.t. the $l_2$ norm. 
+\end{lemma}
+\fi 
+
+\subsection{Lecture 12}
+Sparse vector technique (omit)
+
+\subsection{Lecture 13}
+The key result is that $(\epsilon,\delta)$-differential privacy satisfies a ``strong composition'' theorem, in which the $\epsilon$ parameter increases only with the square root of the number of queries. In other words, if we allow this much (i.e., $\epsilon$) privacy to be revealed by each query, then the total privacy revealed after asking $k$ queries is at most $O(\sqrt{k} \epsilon)$, which is much safer than $k\epsilon$.
+
+\begin{theorem} (\textbf{Strong composition})
+	For all $\epsilon,\delta \ge 0$ and $\delta' > 0$, the adaptive composition of $k$ algorithms, each of which is $(\epsilon,\delta)$-differentially private, is $(\hat{\epsilon},\hat{\delta})$-differentially private where $\hat{\epsilon} = \epsilon \sqrt{2k \ln (1/\delta')} + k\epsilon \frac{e^\epsilon-1}{e^\epsilon+1}$ and $\hat{\delta}=k\delta + \delta'$.
+\end{theorem}
+
+Another key feature of differentially private mechanisms is that they are \textbf{closed under post-processing}. 
+
+\subsection{Lecture 14}
+The key result in this section is that for differentially private mechanisms, the expected generalization error can be converted to high probability bounds on low generalization error. 
+
+\begin{theorem} (\textbf{High probability bound})
+	Let $\epsilon \in [\sqrt{12/n}, 1/5]$ and $\delta \le \epsilon/16$. Let $M:\mathcal{X}^n \rightarrow \mathcal{Q}_{1/n}$ be $(\epsilon,\delta)$-max-KL stable where $\mathcal{Q}_{1/n}$ is the class of $1/n$-sensitive queries $q:\mathcal{X}^n \rightarrow \mathbb{R}$. Let $\mathcal{D}$ be a distribution on $\mathcal{X}$. Then 
+	\begin{align*}
+		P\left(|q(\mathcal{D}) - q(S)| \ge 6 \epsilon \right) = \max \left\{\frac{4\delta}{\epsilon}, e^{-\epsilon^2n/8} \right\}.
+	\end{align*}
+\end{theorem}
+
+A corollary of this theorem is the \textit{transfer theorem} for differentially private mechanisms. 
+
+\begin{corollary} (\textbf{Transfer theorem for differentially private mechanisms})
+	For every distribution $\mathcal{D}$ and $\epsilon,\delta$ as in the above theorem, if $M$ is a $(\epsilon,\epsilon \cdot \delta)$-differentially private mechanism that answers adaptive statistical queries and it is $(\epsilon,\delta)$-accurate w.r.t. samples, then it is $(O(\epsilon),O(\delta))$-accurate w.r.t. the distribution $\mathcal{D}$.
+\end{corollary}
+\end{document}
