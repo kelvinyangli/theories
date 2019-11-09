@@ -1,0 +1,643 @@
+\documentclass[]{article}
+
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb,mathtools} % maths symbols 
+\usepackage{amsthm} % define proof environment
+\usepackage{amsfonts} % extended maths symbols and fonts 
+%\usepackage{algorithm2e}
+
+
+\newtheorem{theorem}{Theorem}[section] 
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{definition}{Definition}[section] % definition numbers are dependent on theorem numbers
+\newtheorem{proposition}{Proposition}[section] % same for example numbers
+
+%\renewcommand{\vec}[1]{\mathbf{#1}}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%opening
+\title{Spectral Graph Theory}
+\author{Kelvin Li}
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+		These are the study notes of the course \textit{Spectral Graph Theory} by Daniel Spielman at the Yale University, Fall 2015. There are 26 lectures. I try to summarise the important results and topics in each of the lectures and my own interpretations of these results. 
+		
+		A reference book that I use is \textit{Spectra of Graphs} by Andries E. Brouwer and Willem H. Haemers, 2010. 
+	\end{abstract}
+	
+	\section{Lecture 1 Introduction}
+	Spectral graph theory has applications in graph drawing, graph isomorphism graph approximation and etc. This area uses a lot of results from linear algebra (in particular matrix theory).\footnote{The time complexity of finding eigenvalues of a $n \times n$ symmetric matrix is $O(n^3)$.}
+	
+	There are two natural matrices corresponding to a graph $G(V,E)$, the adjacency matrix $A$ and the degree (or diagonal) matrix $D$. These two matrices themselves are boring, but some interesting matrices are defined based on them. For example, we can define the \textbf{diffusion matrix} as
+	\begin{align*}
+	W = D^{-1}A
+	\end{align*} 
+	that describes the diffusion of stuff (e.g., gas) among the vertices of a graph. We can also define an important matrix called the the \textbf{Laplacian matrix} 
+	\begin{align*}
+	L=D-A.
+	\end{align*}
+	Given a function (or vector) $x \in \mathbb{R}^V$ on the vertices, the \textbf{Laplacian quadratic form}\footnote{A function $Q: \mathbb{R}^n \rightarrow \mathbb{R}$ is a \textbf{quadratic form} if $Q(\vec{x}) = \vec{x}^T A \vec{x}$, where $\vec{x}$ is a column vector of length $n$. $A$ is said to be the matrix of this quadratic form. Quadratic form defines a quadratic surface in a $n$-dimensional space.} is 
+	\begin{align*}
+	x^T L x = \sum_{(u,v)\in E} (x(u) - x(v))^2.
+	\end{align*}
+	It measures the smoothness of a vector $\vec{x}$.\footnote{Smoothness here corresponds to the values assigned to each pair of adjacent vertices. The smoothest vector is the constant vector, in which every element has the same value.} The Laplacian quadratic form is sort of similar to the notion of \textbf{Laplacian operator} of a function, both of which measure the smoothness of a function. Hence, the Laplacian quadratic form measures the smoothness of the eigenvectors of the Laplacian. The quadratic form is important when maximizing (respectively minimizing) the Rayleigh quotient of the Laplacian matrix.\footnote{Normalized Laplacian is introduced in Lecture 6.}  
+	
+	A function in the context of graphs can be thought as a real value function that maps the vertices of a graph to real values. Imagine we a graph in a graph in a 2-dimensional space. A graph function maps each vertex of the graph to a vertical line, the height of which is the value of the vertex. Now we have a dicrete ``surface'', whose domain are the graph vertices. Using the Laplacian quadratic form we can measure how smooth or bumpy the ``surface'' is. Later, we will see that the eigenvectors of the Laplacian are indeed this type of \textbf{graph functions}.
+	
+	\begin{definition}
+		A matrix $A$ is \textbf{similar} to a matrix $B$ if there is a non-singular\footnote{A matrix is \textbf{singular} if and only its determinant is zero.} matrix $M$ such that $M^{-1}AM=B$. 
+	\end{definition}
+	If $A$ and $B$ are similar, then they have the same set of eigenvalues. Almost all the matrices consider in this course are \textit{symmetric} or similar to symmetric matrices. 
+	
+	\begin{definition}
+		Let $M$ be an $n\times n$ matrix. The \textbf{characteristic polynomial} of $M$ is $p_M(x)=\det (xI - M)$.
+	\end{definition}
+	The \textbf{eigenvalues} of $M$ are the roots of the equation $p_M(x)=0$.
+	
+	\begin{definition}
+		A vector $\psi$ is an \textbf{eigenvector} of a matrix $M$ with eigenvalue $\lambda$ if $M\psi=\lambda \psi$.
+	\end{definition}
+	A matrix represents a linear transformation. An eigenvector of a matrix $M$ is a non-zero vector that is invariant under the linear transformation by $M$, up to a scalar. This scalar is the eigenvalue, to which the eigenvector correspond. In other words, under the linear transformation by $M$, the eigenvectors do not change directions, but their scale may or may not change, depending on their corresponding eigenvalues. If an eigenvector is for the eigenvalue $1$, then its magnitude does not change under $M$. If its eigenvalue is $3$, its magnitude is scaled 3 times. 
+	
+	The eigenvectors of a given eigenvalue are only determinant up to an orthogonal transformation. 
+	
+	\begin{theorem} (\textbf{Spectral theorem})
+		An $n \times n$ real symmetric matrix has $n$ eigenvalues and $n$ eigenvectors that are unit vectors and mutually orthogonal.\footnote{The \textbf{spectral theorem} states that any symmetric matrix is diagonalizable.}\footnote{A matrix $A$ is \textbf{diagonalizable} if it is similar to a diagonal matrix $B$. That is, there exists an invertible matrix $P$ such that $B = P^{-1}AP$.}
+	\end{theorem}
+	It a matrix is not symmetric, it may not have $n$ eigenvalues. Even if it has $n$ eigenvalues, the corresponding $n$ eigenvectors will not be mutually orthogonal. 
+	
+	\begin{definition}
+		The \textbf{Rayleigh quotient} of a vector $x$ w.r.t. a matrix $M$ is the ratio 
+		\begin{align*}
+		\frac{x^T M x}{x^T x}. 
+		\end{align*}
+	\end{definition}
+	By definition, if $\psi$ is a eigenvector of $M$ for the eigenvalue $\lambda$, then the Rayleigh quotient of $\psi$ is $\lambda$. The notion of Rayleigh quotient is important, because it allows one to prove more insights about the eigenvalues (in particular the largest and smallest) of a matrix by connecting with the Laplacian quadratic form. 
+	
+	\begin{theorem} (\textbf{Rayleigh quotient maximization})
+		Let $M$ be a symmetric matrix and $x$ be a non-zero vector that maximizes the Rayleigh quotient w.r.t. $M$. Then $x$ is an eigenvector of $M$ w.r.t. the eigenvalue that is equal to the Rayleigh quotient, and this eigenvalue is the largest eigenvalue of $M$. That is, 
+		\begin{align*}
+		\psi = \arg\max_{x} \frac{x^T M x}{x^T x}
+		\end{align*}
+		is an eigenvector of $M$ for the eigenvalue $\lambda$, where 
+		\begin{align*}
+		\lambda = \max_{x} \frac{x^T M x}{x^T x}.
+		\end{align*}
+	\end{theorem}
+	The theorem can also be proved for \textbf{minimization}, in which the Rayleigh quotient is the smallest eigenvalue of $M$. 
+	
+	\begin{lemma} (\textbf{Smallest eigenvalue of Laplacian})
+		\label{lemma:smallest eigenvalue of laplacian}
+		The smallest eigenvalue of the Laplacian is zero. The corresponding eigenvector is a constant vector $x=(c,\dots, c)$.
+	\end{lemma}
+	The lemma makes sense intuitively. The sum of each column (or row) of the Laplacian is 0, so for the constant vector $\vec{1} = (1, \dots, 1)$, we have $0 = L \vec{1} = \lambda \vec{1}$. Hence, $\lambda=0$. Since the determinant of a matrix is the product of all its eigenvalues, this also implies that the \textbf{Laplacian matrix is singular}. 
+	\begin{proof}
+		Using Rayleigh quotient, in which $M$ is the graph Laplacian, so the numerator is just the Laplacian quadratic form, in which each term in the summation is non-negative. So the smallest numerator is $0$, which is obtained when $x$ is a constant vector (or function). By the above theorem, this minimized Rayleigh quotient is the smallest eigenvalue of $M$. 
+	\end{proof}
+	
+	Assume without loss of generality that the eigenvalues of $M$ are sorted $\lambda_1 \le \lambda_2 \le \dots \le \lambda_n$. 
+	
+	\begin{lemma} (\textbf{Second smallest eigenvalue of Laplacian})
+		$\lambda_2 > 0$ if and only if the graph $G$ is connected. 
+	\end{lemma}
+	\begin{proof}
+		If $G$ contains two components, construct a vector for each component with constant values for vertices in the component and zero value for vertices out of the component. So the dot product of these two vectors is zero, which implies they are orthogonal. Both have corresponding zero eigenvalue, so $\lambda_2 > 0$. 
+		
+		If $G$ is connected, then there must exist an eigenvector $\vec{x}$ that is orthogonal to the constant eigenvector. This implies that $x(u) \neq x(v)$ for some vertices $u,v$, because we want zero dot product. Since $G$ is connected, there is a path between $u$ and $v$. This implies that there must be an edge on the path such that the two end nodes have different values, hence the Laplacian quadratic form is positive, so is $\lambda_2$.
+	\end{proof}
+	
+	The second smallest eigenvalue $\lambda_2$ of a graph Laplacian is called the \textbf{algebraic connectivity of a graph}. Later, we will see that the smallest eigenvalue of the diffusion matrix is zero if and only if the graph is bipartite. 
+	
+	The $i^{th}$ eigenvector of the graph Laplacian is (approximately?) a polynomial of order $i-1$ of node index. That is, when plotting the second eigenvector (on the Y-axis) against node indices (on the X-index), the plot is roughly a straight line. When plotting the third, the plot is a quadratic curve. See plots near the end of Lecture 1. 
+	
+	\subsection{Notes}
+	Some additional nodes worth mentioning: 
+	
+	\begin{enumerate}
+		\item By Spectral theorem, the adjacency and Laplacian matrices' eigenvectors form $n$ orthonormal basis. Hence, their eigenvalues' \textbf{algebraic} and \textbf{geometric multiplicities} \footnote{\textbf{Algebraic multiplicity} of an eigenvalue $\lambda$ refers to the degree of the root $\lambda$ in the characteristic polynomial. For example, if the characteristic polynomial of a matrix is $(1-\lambda)^2=0$, then the eigenvalue $\lambda=1$ has algebraic multiplicity 2. \textbf{Geometric multiplicity} of $\lambda$ is the dimension of the null space of the matrix. For example, if a matrix $A = \begin{bmatrix}
+			5 & 0 \\
+			0 & 5
+			\end{bmatrix}$, its eigenvalue $\lambda=5$ has geometric multiplicity 2. If $A = \begin{bmatrix}
+			5 & 1 \\
+			0 & 5
+			\end{bmatrix}$, its eigenvalue $\lambda=5$ has geometric multiplicity 1. Both cases have algebraic multiplicity 2.} are identical. Hence, we use the term multiplicity without referencing to algebraic or geometric. Note geometric multiplicity is \textbf{bounded above} by algebraic multiplicity.
+		\item The \textbf{(ordinary) spectrum} of a graph is the spectrum of the graph's adjacency matrix, that is, its sets of eigenvalues and multiplicities. The \textbf{Laplace spectrum} is the spectrum of the Laplacian matrix. 
+		\item The eigenvalues and eigenvectors are of a adjacency or Laplacian matrix are \textbf{invariant under vertex numbering}. 
+	\end{enumerate}
+	
+	\section{Lecture 2 The Laplacian}
+	
+	\begin{theorem} (\textbf{Eigenvalues and eigenvectors optimization})
+		Let $M$ be an $n \times n$ symmetric matrix with eigenvalues $\lambda_1 \le \lambda_2 \le \dots \lambda_n$ with corresponding eigenvectors $\psi_1, \dots, \psi_n$. Then 
+		\begin{align*}
+		\lambda_i &= \min_{x \perp \psi_1, \dots, \psi_{i-1}} \frac{x^T M x}{x^T x}, \\
+		\psi_i &= \arg\min_{x \perp \psi_1, \dots, \psi_{i-1}} \frac{x^T M x}{x^T x}.
+		\end{align*}
+	\end{theorem}
+	
+	The \textbf{Laplacian quadratic form} for a weighted graph $G=(V,E)$ is 
+	\begin{align}
+	\label{equation:laplacian quadratic form}
+	x^T L x = \sum_{(uv) \in E} w_{uv} (x(u) - x(v))^2.
+	\end{align}
+	
+	Let $L_{G_{uv}}$ be the Laplacian of the graph $G_{uv}$, in which the graphs has only one edge $E(G_{uv})=\{uv\}$ and possibly more than two vertices. Hence, $L_{G_{uv}}$ has the form that the intersections between the rows and columns indexed by $u$ and $v$ are $\begin{bmatrix}
+	1 & -1 \\
+	-1 & 1
+	\end{bmatrix}$ and everywhere else is $0$. Hence, the Laplacian of a graph $G$ can be obtained by summing $L_{G_{uv}}$ over all edges $uv$ in $G$. That is, 
+	\begin{align*}
+	L_G = \sum_{uv \in E} w_{uv} L_{G_{uv}}.
+	\end{align*}
+	Intuitively this makes sense too, because if the vertex $u$ has degree $d(u)=3$, the corresponding row and column for the vertex $u$ will appear $3$ times in the summation. 
+	
+	Another important interpretation of the Laplacian matrix is that it is an operator 
+	\begin{align*}
+	(L_Gx)(u) = d(u)x(u) - \sum_{uv \in E}w_{uv}x(v) = \sum_{uv \in E} w_{uv}(x(u)-x(v)).
+	\end{align*}
+	
+	\subsection{Graph drawing}
+	When drawing a graph, take a vector $x \in \mathbb{R}^V$ that maps each vertex of the graph $G$ to a real value. We would like two adjacent vertices to have close values. \footnote{Probably because we do not want an edge to cross half of the space to connect two vertices.} So this becomes a constraint optimization problem. That is, find a vector $x$ such that Equation (\ref{equation:laplacian quadratic form}) is minimized, where the constraints are $||x||^2=1$ to avoid $x$ be a zero vector and $\sum_{i=1}^V x(i) = 0$ to avoid $x$ being a constant vector with $x(i)=1/\sqrt{n}$.
+	
+	When drawing the graph in one dimension, the optimal $x$ is the eigenvector of norm $1$ for the second smallest eigenvalue $\lambda_2$. When drawing in two dimensions, we need to find two optimal vectors $x,y$ with ad additional constraint that they are orthogonal. So the optimal $x,y$ are the unit eigenvectors for $\lambda_2,\lambda_3$ respectively. 
+	
+	\subsection{Isoperimetry, expander graph and $\lambda_2$}
+	\begin{definition}
+		Let $S \subseteq V$ be a subset of vertices of the graph $G=(V,E)$. The \textbf{boundary} of $S$ is 
+		\begin{align*}
+		\partial(S) = \{uv \in E \mid u \in S, v \notin S\}
+		\end{align*}
+		the set of edges connecting $S$ and the rest of the graph. 
+	\end{definition}
+	
+	\begin{definition}
+		Let $S \subseteq V$ be a non-empty subset of vertices of the graph $G=(V,E)$. The \textbf{isoperimetric ratio} of $S$ is 
+		\begin{align*}
+		\theta(S) = \frac{|\partial(S)|}{|S|}.
+		\end{align*}
+	\end{definition}
+	
+	\begin{definition}
+		The \textbf{isoperimetric number (or edge expansion or Cheeger constant)} of a graph $G$ with $n$ vertices is  
+		\begin{align*}
+		\theta_G = \min_{S:|S|\le n/2} \theta(S).
+		\end{align*}
+		the minimum isoperimetric ratio over all non-empty subsets of at most half the vertices in $G$.
+	\end{definition}
+	The condition $|S| \le n/2$ says we partition the graph vertices into two subsets and take the smaller one. 
+	
+	Based on these definitions, we can prove the next theorem, which gives a \textbf{lower bound} on the isoperimetric number of a graph $G$ in terms of the second smallest eigenvalue $\lambda_2$ of the graph Laplacian. 
+	\begin{theorem} (\textbf{Isoperimetric number lower bound})
+		Let $G=(V,E)$ be a graph. For every $S \subsetneq V$, the isoperimetric ratio of $S$ satisfies 
+		\begin{align*}
+		\theta(S) \ge \lambda_2(1-s),
+		\end{align*}
+		where $s=|S|/|V|$ and $\lambda_2$ is the second smallest eigenvalue of the graph Laplacian. In particular, the isoperimetric number of $G$ satisfies 
+		\begin{align*}
+		\theta_G \ge \frac{\lambda_2}{2}.
+		\end{align*}
+	\end{theorem}
+	\begin{proof}
+		The proof relies on the \textbf{characteristic vector (or indicator vector)} of the set $S$ 
+		\begin{align*}
+		\chi_S(u) = 
+		\begin{cases}
+		1 & \quad \text{ if } u \in S\\
+		0 & \quad \text{ otherwise.}
+		\end{cases}
+		\end{align*}
+		It shows that the characteristic vector is not orthogonal to the $\psi_1$ that is a constant vector. But it can be used to create another vector $x$ that is orthogonal to $\psi_1$. 
+	\end{proof}
+	The theorems says that if $\lambda_2$ is large, then the graph $G$ is very well connected, because the boundary of any small subset of vertices is large. This relates to the concept of \textbf{expander graph}, which is vaguely understood as a finite undirected graph in which every small subset of vertices has large boundary. Every connected graph is an expander graph. A disconnect graph is not an expander graph, because there exists a component which has empty boundary. 
+	
+	\begin{remark}
+		Let $S \subseteq V$ and $s = |S|/|V|$. Then 
+		\begin{align*}
+		||\chi_S - s \vec{1}||^2 = s(1-s)|V|.
+		\end{align*}
+	\end{remark}
+	
+	\subsection{Eigenvalues and eigenvectors of the Laplacian of some graphs}
+	
+	For complete graphs $K_n$. 
+	
+	\begin{theorem}
+		The Laplacian of the complete graph $K_n$ has eigenvalue $0$ with multiplicity $1$ and $n$ with multiplicity $n-1$.
+	\end{theorem}
+	
+	For start graph $S_n$. 
+	
+	\begin{lemma}
+		Let $G=(V,E)$ be a graph, and let $v,w$ be vertices of degree one that are both connected to another vertex $z$. Then, the vector $\psi=\delta_v-\delta_w$ is an eigenvector of $L_G$ of eigenvalue $1$. 
+	\end{lemma}
+	
+	\begin{theorem}
+		The graph $S_n$ has eigenvalue $0$ with multiplicity $1$, eigenvalue $1$ with multiplicity $n-2$, and eigenvalue $n$ with multiplicity $1$. 
+	\end{theorem}
+	
+	Hypercube graphs, skipped. 
+	
+	\section{Lecture 3 The adjacency matrix and graph coloring}
+	
+	\subsection{Adjacency matrix}
+	The adjacency matrix $A$ of a weighted graph can be viewed as an operator that acts on a vector $x \in \mathbb{R}^V$ by 
+	\begin{align*}
+	(Ax)(u) = \sum_{uv\in E} w_{uv}x(v).
+	\end{align*}
+	
+	Denote the eigenvalues of $A$ by $\mu_1, \dots, \mu_n$ and order them in the opposite direction $\mu_1 \ge \mu_2 \ge \dots \ge \mu_n$. 
+	
+	If $G$ is a $d$-regular graph, then $L = Id-A$. The eigenvalues satisfy $\lambda_i = d- \mu_i$. The largest $\mu_i=d$, which corresponds to the smallest $\lambda_i=0$. Hence, the eigenvector for the largest eigenvalue of the adjacency matrix is a constant vector. 
+	
+	\begin{lemma} (\textbf{Bounds on the largest eigenvalue})
+		Let $d_{max}$ and $d_{ave}$ be the maximum and average degree of a vertex in a graph $G$. Then 
+		\begin{align*}
+		d_{ave} \le \mu_1 \le d_{max}.
+		\end{align*}
+	\end{lemma}
+	
+	\begin{lemma}(\textbf{Better lower bound})
+		For every $S \subseteq V$, let $d_{ave}(S)$ be the average degree of vertices in the induced subgraph $G[S]$ by the vertices in $S$. Then 
+		\begin{align*}
+		d_{ave}(S) \le \mu_1.
+		\end{align*}
+	\end{lemma}
+	This lemma is proved using the following result from linear algebra. 
+	
+	\begin{lemma}
+		Let $A$ be a symmetric matrix and let $S$ be a subset of its row and columns indices. Then the eigenvalues satisfy  
+		\begin{align*}
+		\lambda_{max}(A) \ge \lambda_{max}(A(S)) \ge \lambda_{min}(A(S)) \ge \lambda_{min}(A).
+		\end{align*}
+	\end{lemma}
+	
+	\begin{lemma} (\textbf{Largest eigenvalue})
+		If $G$ is connected and $\mu_1=d_{max}$, then $G$ is $d_{max}$-regular.
+	\end{lemma}
+	
+	Although the largest eigenvalue of the adjacency matrix of a regular graph is 0 and hence its corresponding eigenvector is a constant vector, the eigenvector is usually not constant for general graphs. 
+	
+	
+	\begin{lemma} (\textbf{Non-negative implies positive})
+		Let $G$ be a connected (non-negative) weighted graph. If $\phi$ is a non-negative eigenvector of its adjacency matrix $A$, then $\phi$ is strictly positive. 
+	\end{lemma}
+	
+	\begin{theorem} (\textbf{Perron-Frobenius for symmetric graphs})
+		Let $G$ be a connected weighted symmetric graph. Let $A$ be its adjacency matrix and $\mu_1 \ge \dots \ge \mu_n$ be its eigenvalues. Then 
+		\begin{enumerate}
+			\item $\mu_1 \ge -\mu_n$.
+			\item $\mu_1 > \mu_2$.
+			\item The eigenvalue $\mu_1$ has a strictly positive eigenvector.
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{proof}
+		To prove part 3, we can construct a vector $x = |\phi_1|$ that is the absolute value of the eigenvector for the largest eigenvalue $\mu_1$. Since $x$ is non-negative, once we can prove that $x$ is also an eigenvector of $\mu_1$, we can apply the above lemma to conclude that $\mu_1$ has a positive eigenvector. 
+	\end{proof}
+	
+	\begin{proposition} (\textbf{Bipartite graph})
+		If $G$ is connected, then $\mu_n=-\mu_1$ if and only if $G$ is bipartite. 
+	\end{proposition}
+	
+	The $n^{th}$ eigenvalue $\mu_n$ (smallest of $A$) and $\lambda_n$ (largest of $L$) correspond to the highest \textbf{frequency vibration}\footnote{What is it?} in a graph. The corresponding eigenvector tries to assign as different as possible values to neighbouring vertices. This is consistent with the plot for the largest eigenvector in Lecture 1, in which at each node index, the plot has a local optimal.\footnote{Because eigenvectors are invariant under vertex numbering.} 
+	
+	
+	\subsection{Graph coloring}
+	
+	\begin{definition}
+		A \textbf{$k$-coloring} of a graph $G=(V,E)$ is a function $c: V \rightarrow \{1, \dots, k\}$ so that for all edges $uv \in E$, we have $c(u) \neq c(v)$. 
+	\end{definition}
+	
+	\begin{definition}
+		A graph is \textbf{$k$-colorable} if it has a $k$-coloring. 
+	\end{definition}
+	
+	\begin{definition}
+		The \textbf{chromatic number} of a graph $G$, written $\chi_G$, is the least $k$ for which $G$ is $k$-colorable. 
+	\end{definition}
+	
+	\begin{lemma} (\textbf{2-colorable})
+		A graph $G$ is 2-colorable if and only if it is bipartite. 
+	\end{lemma}
+	
+	\begin{lemma} (\textbf{3-colorable})
+		Determining whether or not a graph is 3-colorable is an NP-complete problem. 
+	\end{lemma}
+	
+	\begin{theorem} (\textbf{4-colorable})
+		Every planar graph is 4-colorable. 
+	\end{theorem}
+	
+	\begin{remark}
+		Every graph is $d_{max}+1$-colorable.
+	\end{remark}
+	
+	\begin{remark}
+		Order the vertices of a graph $1,\dots,n$. Let $k$ be an upper bound on the number of neighbours of every vertex $u \in V$ that has smaller labels. That is, 
+		\begin{align*}
+		|\{v \mid uv \in E and v < u\}| \le k, \quad \forall u \in V.
+		\end{align*}
+		Then $G$ can be colored with at most $k+1$ colors. 
+	\end{remark}
+	
+	\begin{theorem} (\textbf{Wilf's theorem})
+		Let $\mu_1$ be the largest eigenvalue of the adjacency matrix of a graph $G$. The chromatic number of $G$ satisfies 
+		\begin{align*}
+		\chi_G \le \floor*{\mu_1} + 1.
+		\end{align*}
+	\end{theorem}
+	\begin{proof}
+		The proof relies on the above remark. It first finds a vertex with degree a most $\mu_1$. Such a vertex exists due to the bound that $d_{ave}(G) \le \mu_1$. Label this vertex $n$. Then use the fact that the largest eigenvalue of any subgraph is bounded above by $\mu_1$.
+	\end{proof}
+	
+	
+	\begin{lemma} (\textbf{Block matrix})
+		Let 
+		
+		\begin{align*}
+		A = 
+		\begin{bmatrix}
+		A_{1,1} & A_{1,2} & \cdots & A_{1,k} \\
+		A_{1,2}^T & A_{2,2} & \cdots & A_{2,k} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		A_{1,k}^T & A_{2,k}^T & \cdots & A_{k,k}
+		\end{bmatrix}
+		\end{align*}
+		be a block-partitioned symmetric matrix with $k \ge 2$. Then 
+		\begin{align*}
+		(k-1) \lambda_{min}(A) + \lambda_{max}(A) \le \sum_i \lambda_{max}(A_{i,i}).
+		\end{align*}
+	\end{lemma}
+	
+	
+	\begin{theorem} (\textbf{Hoffman's bound})
+		Let $\mu_1,\mu_n$ be the largest and smallest eigenvalues of the adjacency matrix of a graph $G$. The chromatic number of $G$ satisfies 
+		\begin{align*}
+		\chi_G \ge \frac{\mu_1 - \mu_n}{-\mu_n} = 1 + \frac{\mu_1}{-mu_n}.
+		\end{align*}
+	\end{theorem}
+	
+	\section{Lecture 4 Bounding eigenvalues}
+	
+	The Courant-Fischer theorem turns an eigenvalue of a symmetric matrix into the solution of optimization problems, hence are useful when proving bounds on the largest eigenvalue. 
+	
+	\begin{theorem} (\textbf{Courant-Fischer theorem})
+		Let $L$ be a symmetric matrix with eigenvalues $\lambda_1 \le \lambda_2 \le \dots \le \lambda_n$. Then, 
+		\begin{align*}
+		\lambda_k 
+		= \min_{\substack{S \subseteq \mathbb{R}^n \\ \dim(S) = k}} \max_{x \in S} \frac{x^T L x}{x^T x} 
+		= \max_{\substack{T \subseteq \mathbb{R}^n \\ \dim(T) = n-k+1}} \min_{x \in T} \frac{x^T L x}{x^T x}.
+		\end{align*}
+	\end{theorem}
+	(Alternatively) The way to interpret the first equality is that for all choices of a vector $x$ that maximize the Rayleigh quotient, find the one that is orthogonal to those that have been found and minimizes the total value. The max is used to ensure $x$ is an eigenvector. For example, when $k=2$, each of the $n-1$ eigenvectors is orthogonal to the constant vector $v_1$. But the one that minimizes the total value is $v_2$.
+	
+	The way to interpret the theorem is that $S$ is a $k$-dimensional subspace. Within $S$, we want to find a vector $x$ that is orthogonal to a $k-1$-dimensional subspace and maximize the Rayleigh quotient. For every choice of $S$ we can find such a vector $x$, so we want to find the $S$ that minimizes the maximized Rayleigh quotient. The second max min can be interpreted similarly, but starting from $n$ down to $1$-dimensional subspace. For example, when $k=1$, $S$ is a 1-dimensional subspace. That is, $S$ can be the span of any eigenvector $\psi_i$ of $L$. Within each of the $n$ choices of $S$, the max Rayleigh quotient is achieved when $x$ is an eigenvector. By Rayleigh quotient minimization, we know the smallest Rayleigh quotient is the smallest eigenvalue of $L$. 
+	
+	\begin{proof}
+		The theorem is proved in two steps. Firstly, show that for any $k$-dimensional subspace $S$, it follows that $\max_{x \in S} \frac{x^T L x}{x^Tx} \ge \lambda_k$. Then, prove that the minimum equals $\lambda_k$, which happens when $S$ is the span of eigenvectors $\{\psi_1, \dots, \psi_k\}$. 
+	\end{proof}
+	
+	Some additional useful notations. Use the \textbf{partial order} notation $\succeq$ to compare matrices and graphs. 
+	\begin{itemize}
+		\item $A \succeq 0$ denotes the matrix $A$ is positive semi-definite.\footnote{That is, for all vector $v$, we have $v^T A v \ge 0$. By Rayleigh quotient, this implies that all eigenvalues of $A$ are non-negative, because the denominator of the Rayleigh quotient is the length of $v$.} That is, $v^T A v \ge 0$ for all $v$.
+		\item If $A, B$ are $n \times n$ square matrices, write $A \succeq B$ if $A - B \succeq 0$, which is equivalent to $v^T A v \ge v^T B v$ for all $v$.
+		\item For (weighted) graphs $G$ and $H$, write $G \succeq H$ if $L_G \succeq L_H$.
+		\item For a weighted graph $H$, write $c \cdot H$ to denote the same graph but the weight of every edge in $H$ is multiplied by a constant $c > 0$.
+	\end{itemize}
+	If $H \subseteq G$ is a subgraph of $G$, then the Laplacian quadratic form implies that $L_G \succeq L_H$, because dropping an edge from $G$ will not make the summation any larger due to the square difference. 
+	
+	\begin{lemma}
+		If $G$ and $H$ are graphs such that $G \succeq c \cdot H$, then $\lambda_k(G) \ge c\lambda_k(H)$.
+	\end{lemma}
+	\begin{proof}
+		Prove using Courant-Fischer theorem and the fact that $L_G \succeq cL_H$.
+	\end{proof}
+	
+	\begin{corollary}
+		Let $G$ be a graph and let $H$ be obtained by either adding an edge to $G$ or increasing the weight of an edge in $G$. Then, $\lambda_i(G) \le \lambda_i(H)$ for all $i$.
+	\end{corollary}
+	
+	\subsection{Approximation of graphs}
+	\begin{definition}
+		A graph $H$ is a \textbf{$c$-approximation} of $G$ if $cH \succeq G \succeq H/c$.
+	\end{definition}
+	
+	\begin{theorem} (\textbf{Regular graph approximates complete graph})
+		For every $\epsilon > 0$, there exists a $d > 0$ such that for all sufficiently large $n$ there is a $d$-regular graph $G_n$ that is a $(1+\epsilon)$-approximation of $K_n$.
+	\end{theorem}
+	
+	\textcolor{red}{Skipped the rest of this lecture.}
+	
+	
+	\section{Lecture 5 Rings, paths and Cayley graphs}
+	\textcolor{red}{This lecture is devoted to an examination of some special graphs and their eigenvalues. So I skipped it for now!}
+	
+	\section{Lecture 6 Conductance, the normalized Laplacian and Cheeger's inequality}
+	
+	
+	\begin{definition}
+		Let $G=(V,E)$ be a graph. The \textbf{conductance} of an non-empty proper subset $S \subsetneq V$ is 
+		\begin{align*}
+		\phi(S) = \frac{|\partial(S)|}{\min\{d(S), d(V-S)\}},
+		\end{align*}
+		where $d(S) = \sum_{u \in S} d(u)$ is the sum of degrees of vertices in $S$.
+	\end{definition}
+	Conductance is a measure of how ``connected'' a vertex subset $S$ is to the rest of the graph. It ranges in $[0,1]$, where 0 is when $S$ is disconnected from the rest of the graph and 1 is when $S$ contains a single vertex only. In the context of clustering, when $\phi(S)\approx 0$, the vertices in $S$ form its own cluster and are less connected to the rest of the graph. When $\phi(S)=1$, most of the edges in $S$ also leave $S$, so the whole graph forms a single cluster. 
+	
+	\begin{definition}
+		Let $G=(V,E)$ be a graph. The \textbf{conductance} of the graph $G$ is 
+		\begin{align*}
+		\phi_G = \min_{S \subsetneq V} \phi(S)
+		\end{align*}
+		the minimum conductance over all non-empty proper subset $S$ of $V$. 
+	\end{definition}
+	
+	
+	The conductance of a graph is more useful when concerning about the edges, whilst the isoperimetric number is more useful when concerning about vertices. 
+	
+	\begin{definition}
+		The \textbf{normalized Laplacian} is 
+		\begin{align*}
+		N = D^{-1/2} L D^{-1/2} = I - D^{-1/2} A D^{-1/2}.
+		\end{align*}
+	\end{definition}
+	The diagonal entries of $N$ equal to 1, because the degrees are normalized. The entries correspond to adjacent vertices $v_i,v_j$ equal $1/\sqrt{d(v_i)d(v_j)}$. The rest of $N$ equals to 0. The normalized Laplacian is more useful when examining graphs in which nodes have different degrees. The corresponding eigenvalues of a normalized Laplacian are denoted by $0=\nu_1 \le \nu_2 \le \dots \le \nu_n$.\footnote{In fact, the range of the eigenvalues of the normalized Laplacian is between $[0,2]$. This is another reason to work with normalized Laplacian.} The conductance is related to the second smallest eigenvalue $\nu_2$ as the isoperimetric number is related to $\lambda_2$ of $L$. 
+	
+	\begin{lemma} (\textbf{Conductance lower bound})
+		The conductance of a graph $G$ is 
+		\begin{align*}
+		\phi_G \ge \frac{\nu_2}{2}.
+		\end{align*}
+	\end{lemma}
+	
+	\begin{remark} (\textbf{Smallest eigenvector of $N$})
+		The eigenvector for the smallest eigenvalue $\nu_1=0$ is 
+		\begin{align*}
+		d^{1/2}=(\sqrt{d(u_1)}, \dots, \sqrt{d(u_n)}).
+		\end{align*}
+	\end{remark}
+	\begin{proof}
+		\begin{align*}
+		D^{-1/2} L D^{-1/2} d^{1/2} = D^{-1/2} L 1 = D^{-1/2} 0 = 0 = \lambda d^{1/2},
+		\end{align*}
+		where $1$ is the constant eigenvector corresponds to $\lambda_1$. So $\lambda=0$.
+	\end{proof}
+	
+	By Rayleigh quotient, the eigenvector for the second smallest eigenvalue of $N$ is given by 
+	\begin{align*}
+	\arg \min_{x \perp d^{1/2}} \frac{x^T N x}{x^T x}.
+	\end{align*}
+	The eigenvalue $\nu_2$ can also be expressed as 
+	\begin{align*}
+	\nu_2 = \min_{y \perp d} \frac{y^T L y}{y^T D y}
+	\end{align*}
+	in terms of $L$ and $D$, where $x = D^{1/2} y$ and the term 
+	\begin{align*}
+	\frac{y^T L y}{y^T D y}
+	\end{align*}
+	is defined as the \textbf{generalized Rayleigh quotient}. 
+	
+	\begin{theorem} (\textbf{Cheeger's inequality})
+		Let $y$ be a vector orthogonal to $d$. Then, there is a number $t$ for which the set $S_t = \{u \mid y(u) < t\}$ satisfies 
+		\begin{align*}
+		\phi(S_t) \le \sqrt{2\frac{y^T L y}{y^T y}}.
+		\end{align*}
+		By definition of the conductance of a graph $G$, we get 
+		\begin{align*}
+		\phi_G \le \sqrt{2\nu_2}.
+		\end{align*}
+	\end{theorem}
+	\begin{proof}
+		The proof is quite involved, refer to the lecture slides. 
+	\end{proof}
+	
+	\begin{corollary} (\textbf{Conductance boundary})
+		\begin{align*}
+		\frac{\nu_2}{2} \le \phi_G \le \sqrt{2\nu_2}.
+		\end{align*}
+	\end{corollary}
+	\begin{remark} (\textbf{Disconnected graphs})
+		A graph $G$ is disconnected if and only if $\nu_2=0$.
+	\end{remark}
+	
+	\begin{corollary}
+		G graph $G$ is disconnected if and only if its conductance $\phi_G=0$.
+	\end{corollary}
+	\begin{proof}
+		By the remark and the range of $\nu_i \in [0,2]$.
+	\end{proof}
+	
+	In principle, the second eigenvector $v_2$ of the normalized Laplacian $N$ can be used to find the partition $S$ by finding the most appropriate cut value $t$. 
+	
+	\section{Lecture 7 Spring and resistor networks}
+	
+	Imagine that every edge of a graph $G=(V,E)$ is a spring or rubber band. Pick a subset $F \subseteq V$ of vertices. Fix the location of each vertex $u \in F$ at $\vec{x}(u)$. The \textbf{spring constant} of each edge is the weight of that edge. By \textbf{Hook's law}, the force the rubber band between vertices $u$ and $v$ exerts on $u$ is 
+	\begin{align*}
+	w_{uv}\vec{x}(u) - \vec{x}(v)
+	\end{align*}
+	that is proportional to the distance between $u$ and $v$.
+	
+	In a stable condition, a non-fixed vertex $u$ must experience a zero net force (or potential energy?). That is, 
+	\begin{align}
+	&\sum_{v \in N(u)} \left[w_{uv}\vec{x}(v) - \vec{x}(u)\right] = 0 \nonumber \\
+	\implies &\sum_{v \in N(u)} w_{uv}\vec{x}(v) = d(u)\vec{x}(u) \\
+	\implies &\vec{x}(u) = \frac{1}{d(u)}\sum_{v \in N(u)} w_{uv}\vec{x}(v) \nonumber
+	\end{align}
+	where $d(u)=\sum_{v \in N(u)} w_{uv}$. A function $\vec{x}$ is \textbf{harmonic} on $S=V-F$ if $\vec{x}(u)$ satisfies the above equation for every $u \in S$.
+	
+	Equation (2) can be written as 
+	\begin{align*}
+	d(u)\vec{x}(u) - \sum_{v \in S \cap N(u)} 
+	\end{align*}
+	in the form of matrix multiplication 
+	\begin{align*}
+	L(u)\vec{x} = 0.
+	\end{align*}
+	
+	
+\section{Lecture 10 Random walks on graphs}
+
+Define \textbf{random walk} on weighted undirected graphs $G=(V,E,w)$ to be a process that starts from a vertex $u$ then moves to an adjacent vertex with probability proportional to the weight of each edge incident to $u$. The behaviour of a random walk is controlled by the \textbf{probability distribution over vertices} at a certain time. Define this probability distribution at a discrete time step $t$ to be a function 
+\begin{align*}
+	p_t: V \rightarrow \mathbb{R}
+\end{align*}
+such that 
+\begin{align*}
+	p_t(u) \ge 0 \quad \text{ and } \quad \sum_{u \in V} p_t(u)=1,
+\end{align*}
+where $p_t(u)$ is the probability of being at vertex $u$ at time $t$. The initial distribution $p_0$ is concentrated at one vertex $u$ i.e., $p_0(u)=1$, which is the starting point of the random walk. 
+	
+The probability at vertex $u$ at time $t+1$ can be derived from the previous time step probability by 
+\begin{align*}
+	p_{t+1}(u) = \sum_{v \in N(u)}\frac{w_{uv}}{d(v)}p_t(v),
+\end{align*}
+where $d(v)=\sum_{s \in N(v)} w_{sv}$. The above is interpreted as the weight fraction of an edge $uv$ over the degree of a vertex $v$ times the probability the walk is at vertex $v$ at time $t$. 
+
+\textbf{Lazy random walk} is a random walk that has $1/2$ probability of staying at the current vertex and the other $1/2$ probability of being a random walk. Hence, 
+\begin{align}
+p_{t+1}(u) = \frac{1}{2}p_t(u) + \frac{1}{2}\sum_{v \in N(u)}\frac{w_{uv}}{d(v)}p_t(v).
+\end{align}
+\textbf{Diffusion} can be defined the same as lazy random walk. That is, half of the substance stays at the current vertex and the other half distributed randomly (according to some probability) to neighbouring vertices. 
+
+Equation (3) can be written in the following matrix form
+\begin{align*}
+	p_{t+1} &= \frac{1}{2} (I + A D^{-1})p_t. 
+\end{align*}
+Hence, define the \textbf{lazy walk matrix} as 
+\begin{align*}
+	W_G &= \frac{1}{2} (I + A D^{-1}) \\
+	&= I - \frac{1}{2} D^{1/2} N D^{-1/2},
+\end{align*}
+where $N = I - D^{-1/2} N D^{-1/2}$ is the normalized Laplacian. Note $W_G$ is an \textbf{asymmetric} matrix, so the eigenvectors are not necessarily orthogonal. One reason of using the lazy walk is because the matrix \textbf{$W$'s spectrum are bounded between 0 and 1}. Denote the eigenvalues of $W$ as 
+\begin{align*}
+	1 = \omega_1 \ge \omega_2 \ge \dots \ge \omega_n \ge 0,
+\end{align*}
+where $\omega_i = 1 - \nu_i/2$. Another reason is that lazy random walk will always converge to the stable distribution on a connected graph. 
+
+\begin{lemma} (\textbf{Right eigenvector of lazy walk matrix})
+	For every eigenvector $\psi_i$ of $N$ with eigenvalue $\nu_i$, the vector $D^{1/2}\psi_i$ is a right-eigenvector of $W$ for the eigenvalue $\omega_i = 1 - \nu_i/2$.
+\end{lemma}
+\begin{proof}
+	\begin{align*}
+		W\left(D^{1/2}\psi_i\right) 
+		&= \left(I - \frac{1}{2} D^{1/2} N D^{-1/2}\right)\left(D^{1/2}\psi_i\right) \\
+		&= D^{1/2}\psi_i - \frac{1}{2} D^{1/2} N \psi_i \\
+		&= D^{1/2}\psi_i - \frac{1}{2} D^{1/2} \nu_i \psi_i \\
+		&= (1 - \frac{\nu_i}{2})D^{1/2}\psi_i
+	\end{align*}
+\end{proof}
+
+As mentioned above, the lazy random walk will always converge to the \textbf{stable distribution}
+\begin{align*}
+	\vec{\pi} = \frac{\vec{d}}{\vec{1}^T \vec{d}}
+\end{align*}
+regardless of the original distribution over vertices. The stable distribution is a vector of each vertex's degree proportional to the total degree. 
+
+\begin{lemma}
+	$\vec{\pi}$ is a right-eigenvector of $W$ for the eigenvalue 1. 
+\end{lemma}
+\begin{proof}
+	WTS $W\pi = \pi$.
+\end{proof}
+
+\begin{lemma} (\textbf{Lazy random walk convergence})
+	The lazy random walk converges to the stable distribution $\vec{\pi}$.
+\end{lemma}
+\begin{proof}
+	WTS $p_t = W^t p_0 = \vec{\pi}$. That is, apply the lazy walk matrix $t$ time will get to the distribution $\vec{\pi}$.
+	
+	Here $W$ can be seen as an operator that is applied to a vector $p_0$ repeatedly. 
+\end{proof}
+
+
+
+
+
+\end{document}
